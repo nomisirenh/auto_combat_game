@@ -1,91 +1,94 @@
-# combat-project-hsl
+## Introduction
 
+Le but de cet examen d’Analyse Programmation est de créer un petit jeu de combat ou plusieurs 
+personnages provenant de deux équipes s’affrontent dans une arène. Le jeu en langage Python doit 
+s’exécuter dans une console en ligne de commande loggant toutes les actions effectuées par le 
+programme.
+Les combats sont composés de deux équipes de 10 personnages de différentes classes (voir plus loin
+dans l’énoncé). Ces personnages, choisis au hasard à chaque début de partie, sont issus d’une base 
+de donnée créée par vos soins. La partie se termine une fois que l’équipe adverse n’a plus de 
+personnages vivants.
 
+## Déroulement de la partie
 
-## Getting started
+À chaque lancement de l’application et donc du jeu, 20 personnages sont créés au hasard dans la 
+base de données. Ensuite, parmi ces nouveaux personnages et les personnages vivants restants (de la
+bd), 20 sont choisis aléatoirement pour composer les équipes. À la fin de la partie, les point de vie 
+restant des personnages sont enregistrés en base de donnée. Les personnages ayant 0 point de vie 
+sont aussi enregistrés. Ces joueurs ne pourront plus être sélectionnables pour faire d’autres combats 
+vu qu’ils sont éliminés. Un personnage peut être affecté à plusieurs équipes, mais pas pour le même 
+combat.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Afin de faire des statistiques par la suite, après chaque partie, le résultat du combat et le nombre de 
+personnages encore en vie doit être enregistré en base de donnée.
+Chaque personnage correspond à un Thread.
+La partie ne se déroule pas en tour par tour. Chaque personnage attend (1000 / valeur d’initiative) 
+millisecondes, puis effectue une action (écrire l’algorithme de choix), puis attend (1000 / valeur 
+d’initiative), puis effectue une action, etc.
+Un personnage possède plusieurs caractéristiques le définissant, ces caractéristiques sont définies 
+par sa classe, il en existe en tout 4 :
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+•Le guerrier
+- Possède une valeur d’attaque comprise entre 70 et 90
+- Possède une valeur de défense comprise entre 70 et 90
+- Possède une valeur de points de vie comprise entre 120 et 150
+- Possède une chance de coup critique comprise entre 5 % et 7 %
+- Possède une chance de parade comprise entre 40 % et 60 %
+- Possède une initiative comprise entre 40 et 60
 
-## Add your files
+•Le voleur
+- Possède une valeur d’attaque comprise entre 40 et 60
+- Possède une valeur de défense comprise entre 30 et 50
+- Possède une valeur de points de vie comprise entre 70 et 80
+- Possède une chance de coup critique comprise entre 15 % et 20 %
+- Possède une chance d’esquive comprise entre 40 % et 70 %
+- Possède une initiative comprise entre 75 et 90
+-
+•Le mage
+- Possède une valeur d’attaque comprise entre 100 et 150
+- Possède une valeur de défense comprise entre 20 et 40
+- Possède une valeur de points de vie comprise entre 60 et 70
+- Possède une chance de coup critique comprise entre 5 % et 7 %
+- Possède une initiative comprise entre 60 et 70
 
-- [ ] [Create](https://gitlab.com/-/experiment/new_project_readme_content:69b0f134c1094d4fa7e75527dec5923b?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://gitlab.com/-/experiment/new_project_readme_content:69b0f134c1094d4fa7e75527dec5923b?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://gitlab.com/-/experiment/new_project_readme_content:69b0f134c1094d4fa7e75527dec5923b?https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+•Le prêtre
+- Choisit, soit de soigner, soit d’attaquer, à chacun de ses tours
+    -  Il soigne un de ses alliés dont la vie n’est pas à son maximum
+    - Il soigne à hauteur de sa propre défense / 4
+- Possède une valeur d’attaque comprise entre 30 et 60
+- Possède une valeur de défense comprise entre 60 et 80
+- Possède une valeur de points de vie comprise entre 70et 90
+- Possède une chance de coup critique comprise entre 5 % et 7 %
+- Possède une chance de parade comprise entre 30 % et 50 %
+- Possède une initiative comprise entre 50 et 60
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/Masi-s-HenLeb/combat-project-hsl.git
-git branch -M main
-git push -uf origin main
-```
+Un coup critique ignore la défense. Les classes sont attribuées de façon aléatoire tout comme les ses
+caractéristiques.
 
-## Integrate with your tools
+Vous devez afficher un message à chaque action d’un personnage, décrivant l’action, les points de 
+dégâts, etc. Chaque personnage possède aussi un nom et un prénom, qui sera affiché avec chaque 
+action. Je vous conseille de vous baser sur un dictionnaire de nom pour les attribuer.
+Le coup critique n’est calculé qu’après les manœuvres de défense. Si un personnage esquive ou pare
+une attaque, aucun coup critique ne peut être effectué pour cette attaque. Une esquive ou une parade
+permettent au défenseur de ne pas prendre de dégâts. Les dégâts ne sont calculés qu’après calcul des
+manœuvres défensives et du coup critique.
 
-- [ ] [Set up project integrations](https://gitlab.com/-/experiment/new_project_readme_content:69b0f134c1094d4fa7e75527dec5923b?https://docs.gitlab.com/ee/user/project/integrations/)
+Le nombre de dégâts est égal à valeur de l’attaque de l’attaquant à laquelle on soustrait la valeur de 
+défense du défenseur.
 
-## Collaborate with your team
+Il vous est demandé de créer plusieurs tactiques (algorithmes) pour les combats. Après chaque 
+combat, vous devez enregistrer en base de donnée la tactique utilisée par l’équipe perdante et par 
+l’équipe gagnante, permettant ainsi par la suite de savoir quelle est la meilleure stratégie en 
+analysant les résultats de combats. À vous de créer ces algorithmes.
 
-- [ ] [Invite team members and collaborators](https://gitlab.com/-/experiment/new_project_readme_content:69b0f134c1094d4fa7e75527dec5923b?https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://gitlab.com/-/experiment/new_project_readme_content:69b0f134c1094d4fa7e75527dec5923b?https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://gitlab.com/-/experiment/new_project_readme_content:69b0f134c1094d4fa7e75527dec5923b?https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Automatically merge when pipeline succeeds](https://gitlab.com/-/experiment/new_project_readme_content:69b0f134c1094d4fa7e75527dec5923b?https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+## Modalités
+Cet énoncé doit être réalisé au plus tard le jour précédent l’examen. Vous devez aussi réaliser :
+- Les diagrammes d’analyse adéquats (à vous de juger, votre note dépendra aussi de vos 
+choix)
+- Une description textuelle des algorithmes (tactique de combat) accompagné de leurs 
+diagrammes
+- Une base de donnée (format SQL)
+- L’analyse de la base de donnée
 
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://gitlab.com/-/experiment/new_project_readme_content:69b0f134c1094d4fa7e75527dec5923b?https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://gitlab.com/-/experiment/new_project_readme_content:69b0f134c1094d4fa7e75527dec5923b?https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://gitlab.com/-/experiment/new_project_readme_content:69b0f134c1094d4fa7e75527dec5923b?https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://gitlab.com/-/experiment/new_project_readme_content:69b0f134c1094d4fa7e75527dec5923b?https://docs.gitlab.com/ee/user/clusters/agent/)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://gitlab.com/-/experiment/new_project_readme_content:69b0f134c1094d4fa7e75527dec5923b?https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
-
+Tout le code doit se trouver sur le GitLab ainsi que les différents documents écrits/diagrammes le 
+jour avant l’exa
