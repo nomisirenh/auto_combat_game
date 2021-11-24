@@ -2,18 +2,19 @@ import sqlite3
 from sqlite3 import Error
 
 
-def create_connection(db_file):
+def create_connection():
     """ create a database connection to database """
     conn = None
     try:
-        conn = sqlite3.connect(db_file)
-        print(sqlite3.version)
+        conn = sqlite3.connect(r"sql_lite.db")
+        return conn
     except Error as e:
         print(e)
-    finally:
-        if conn:
-            conn.close()
+
 
 
 if __name__ == '__main__':
-    create_connection(r"sql_lite.db")
+    conn = create_connection()
+    if conn is not None:
+        conn.close()
+        
