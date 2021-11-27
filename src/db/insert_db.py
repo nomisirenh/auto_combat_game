@@ -1,4 +1,4 @@
-from db_conection import create_connection
+from src.db.db_conection import create_connection
 
 def insert_fighter(values):
 
