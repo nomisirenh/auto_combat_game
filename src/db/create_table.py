@@ -6,12 +6,13 @@ def create_table(querry):
     conn = create_connection()
 
     if conn is not None:
-        try:
-            conn.cursor()
-            conn.execute(querry)
+        with conn:
+            try:
+                conn.cursor()
+                conn.execute(querry)
 
-        except Error as e:
-            print(e)
+            except Error as e:
+                print(e)
     else:
         print("Can't create database connection")
 
