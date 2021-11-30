@@ -16,4 +16,4 @@ def get_random_fighter():
 if __name__ == '__main__':
     datas = get_random_fighter()
     for datas in datas:
-        print(datas)
+        print(datas[3])
