@@ -45,12 +45,26 @@ class Priest(FighterInterface):
     def take_damage(self, damage):
         return super().take_damage(damage)
 
-if __name__ == '__main__':
-    warrior = Warrior("Albert", "lecon")
-    wizard = Wizard("Jean", "Guy")
+class Team():
+    fighters : list[FighterInterface]
+    def __init__(self, id, name, fighters):
+        self.id = id
+        self.name = name
+        self.fighters = fighters
 
-    while True:
-        if wizard.will_attack:
-            print(f"{wizard.name} {wizard.lastname} attaque !")
-        elif warrior.will_attack:
-            print(f"{warrior.name} {warrior.lastname} attaque !")
+    def get_fighters(self):
+        return self.fighters
+
+    def team_str(self):
+        """
+        Print all fighters that is in the team
+        """
+        print(f'Equipe {self.name} contient:')
+        
+        for fighter in self.fighters:
+            print("--> ", end="")
+            print(fighter)
+        
+
+if __name__ == '__main__':
+    pass

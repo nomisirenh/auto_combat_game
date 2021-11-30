@@ -13,7 +13,20 @@ def get_random_fighter():
         datas = c.fetchall()
         return datas
 
+def get_random_team():
+    sql_querry = """ SELECT * FROM Team
+                     ORDER BY random()
+                    """
+
+    conn = create_connection()
+    with conn:
+        c = conn.cursor()
+        c.execute(sql_querry)
+
+        datas = c.fetchall()
+        return datas
+
 if __name__ == '__main__':
-    datas = get_random_fighter()
+    datas = get_random_team()
     for datas in datas:
-        print(datas[3])
+        print(datas)
