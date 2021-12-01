@@ -1,4 +1,3 @@
-from types import prepare_class
 from src.Fighter_class.Fighter import FighterInterface
 from src.Fighter_class.Class import Warrior, Rogue, Wizard, Priest, Team
 from src.db.insert_db import insert_fighter

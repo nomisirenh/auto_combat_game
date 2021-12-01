@@ -13,7 +13,5 @@ def create_connection():
 
 
 if __name__ == '__main__':
-    conn = create_connection()
-    if conn is not None:
-        conn.close()
+    pass
         

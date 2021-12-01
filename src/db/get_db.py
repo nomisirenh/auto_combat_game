@@ -1,4 +1,4 @@
-from src.db.db_conection import create_connection
+from src.db.db_connection import create_connection
 
 def get_random_fighter():
     sql_querry = """ SELECT * FROM Fighter
@@ -27,6 +27,4 @@ def get_random_team():
         return datas
 
 if __name__ == '__main__':
-    datas = get_random_team()
-    for datas in datas:
-        print(datas)
+    pass

@@ -1,4 +1,4 @@
-from db_conection import create_connection
+from db_connection import create_connection
 from sqlite3 import Error
 
 def create_table(querry):
