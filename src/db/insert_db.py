@@ -47,8 +47,3 @@ def insert_fighter_team(values):
         c.execute(querry, values)
         conn.commit()
         return c.lastrowid
-
-if __name__ == '__main__':
-    values = ('HS', 'lebrun', 'Warrior', 50, 51,42,53, 50, None, None)
-    id = insert_fighter(values)
-    print(id)
