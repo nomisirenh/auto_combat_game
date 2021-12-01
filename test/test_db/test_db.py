@@ -35,6 +35,3 @@ class Db_testing(unittest.TestCase):
         for data in datas:
             datas.pop(datas.index(data))
             self.assertNotIn(data, datas)
-
-if __name__ == '__main__':
-    unittest.main()

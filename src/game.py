@@ -10,7 +10,7 @@ class Game():
     fighters : list[FighterInterface]
     def __init__(self) -> None:
         #self.generate_new_fighter()
-        self.fighters = self.get_figthers()
+        self.fighters = self.get_figthers_from_db()
         self.teams = self.assign_team()
 
     def generate_new_fighter(self):
@@ -33,7 +33,7 @@ class Game():
         
             id = insert_fighter((player.name, player.lastname, player._class, player.attack_value, player.defense_value, player.health_point, player.critical, player.initiative, player.parry, player.dodge))
 
-    def get_figthers(self):
+    def get_figthers_from_db(self):
         """
         Get 20 random fighters from the database
         """
@@ -66,10 +66,7 @@ class Game():
         return teams
 
 if __name__ == '__main__':
-    game = Game()
-
-    for team in game.teams:
-        team.team_str()
+    pass
         
 
 

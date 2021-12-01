@@ -81,6 +81,3 @@ class ClassTesting(unittest.TestCase):
         team  = Team(1, "red", fighter_list)
 
         self.assertEqual(team.get_fighters(), fighter_list)
-
-if __name__ == '__main__':
-    unittest.main()
