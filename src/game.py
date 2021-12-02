@@ -56,6 +56,9 @@ class Game():
         return fighters
 
     def assign_team(self):
+        """
+        Assign 10 fighters in each teams
+        """
         datas = get_random_team()
         teams = list()
         mid = self.fighters[10:]
@@ -73,5 +76,4 @@ class Game():
             print(time())
 
 if __name__ == '__main__':
-    game = Game()
-    game.battle()
+    pass

@@ -17,7 +17,8 @@ class FighterInterface (ABC, threading.Thread):
         self.dodge = dodge
         self._class = _class
         self.id = id
-
+        
+        self.max_hp = health_point
         self.is_dead = False
 
     def will_attack(self) -> bool:
@@ -36,7 +37,22 @@ class FighterInterface (ABC, threading.Thread):
             return False
 
     def parry_or_dodge(self):
-        pass
+        i = randrange(0,100)
+        pod = None
+        if self.parry:
+            if i <= self.parry:
+                pod = True
+            else:
+                pod = False
+        elif self.dodge:
+            if i <= self.dodge:
+                pod = True
+            else:
+                pod = False
+        else:
+            pod = False
+
+        return pod
 
     def take_damage(self, fighter: 'FighterInterface'):
         heal_p = self.health_point

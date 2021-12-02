@@ -122,11 +122,11 @@ class ClassTesting(unittest.TestCase):
                 dam = 0
 
             #test that defense is not ignore
-            print("class: {}".format(fighter._class))
-            print("vie before: {}".format(heal_p_before))
-            print("vie : {}".format(fighter.health_point))
-            print("defense: {}".format(fighter.defense_value))
-            print("damage: {}".format(dam))
+            #print("class: {}".format(fighter._class))
+            #print("vie before: {}".format(heal_p_before))
+            #print("vie : {}".format(fighter.health_point))
+            #print("defense: {}".format(fighter.defense_value))
+            #print("damage: {}".format(dam))
             comp = heal_p_before - dam
 
 
@@ -152,4 +152,16 @@ class ClassTesting(unittest.TestCase):
 
         src.Fighter_class.Fighter.randrange.return_value = 90
         self.assertFalse(rogue.critical_attack())
-        
+
+    def test_parry_or_dodge(self):
+        src.Fighter_class.Fighter.randrange = mock.Mock()
+        src.Fighter_class.Fighter.randrange.return_value = 2
+
+        rogue = Rogue("toto", "tata")
+        self.assertTrue(rogue.parry_or_dodge())
+
+        src.Fighter_class.Fighter.randrange.return_value = 90
+        self.assertFalse(rogue.parry_or_dodge())
+
+        wizard = Wizard("toto", "tata")
+        self.assertFalse(wizard.parry_or_dodge())
