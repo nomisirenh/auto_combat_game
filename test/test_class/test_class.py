@@ -165,3 +165,31 @@ class ClassTesting(unittest.TestCase):
 
         wizard = Wizard("toto", "tata")
         self.assertFalse(wizard.parry_or_dodge())
+
+    def test_set_hp(self):
+        rogue = Rogue("toto", "tata")
+        rogue.health_point = 20
+
+        rogue.set_hp_max()
+        self.assertEqual(rogue.health_point, rogue.max_hp)
+
+    def test_priest_heal(self):
+        #test heal
+        priest = Priest("toto", "tata")
+        wizard = Wizard("toto", "tata")
+
+        #When priest heal himself
+        priest.health_point = 20
+        comp = 20 + priest.defense_value//4
+        priest.heal(priest)
+        self.assertEqual(priest.health_point, comp)
+
+        priest.defense_value = 1000
+        priest.heal(priest)
+        self.assertEqual(priest.health_point, priest.max_hp)
+
+        #When priest heal others
+        wizard.health_point = 20
+        priest.heal(wizard)
+
+        self.assertEqual(wizard.health_point, wizard.max_hp)

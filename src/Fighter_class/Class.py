@@ -53,6 +53,16 @@ class Priest(FighterInterface):
         assert parry <= 50 and parry >= 30
         assert dodge == None
 
+    def heal(self, fighter:FighterInterface):
+        if fighter == self:
+            hp = self.health_point + (self.defense_value//4)
+            if hp > self.max_hp:
+                self.set_hp_max()
+            else:
+                self.health_point = hp
+        else:
+            fighter.set_hp_max()
+
 class Team():
     def __init__(self, id, name: str, fighters: list[FighterInterface]):
         self.id = id

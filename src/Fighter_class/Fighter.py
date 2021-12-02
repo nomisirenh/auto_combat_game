@@ -67,6 +67,12 @@ class FighterInterface (ABC, threading.Thread):
         else:
             self.health_point = heal_p
 
+    def set_hp_max(self):
+        """
+        Hp to max, use for priest to heal
+        """
+        self.health_point = self.max_hp
+
     def run(self) -> None:
         #while self.is_dead is not True:
         print(self)
