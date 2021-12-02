@@ -18,17 +18,22 @@ class FighterInterface (ABC):
     @abstractmethod
     def will_attack(self) -> bool:
 
-        time.sleep((1000 / (self.initiative))/1000)
+        time.sleep(int((1000 / (self.initiative)))/1000)
 
         return True
 
     @abstractmethod
     def take_damage(self, damage):
+        heal_p = self.health_point
         true_damage = damage - self.defense_value
         if true_damage < 0:
             true_damage = 0
 
-        self.health_point - true_damage
+        heal_p = self.health_point - true_damage
+        if heal_p < 0:
+            self.health_point = 0
+        else:
+            self.health_point = heal_p
 
     def __str__(self) -> str:
         #return f'{self.id},{self._class}, {self.name}, {self.lastname}, attaque = {self.attack_value}, defense = {self.defense_value}, health = {self.health_point}, critical = {self.critical}, initiative = {self.initiative}, parry = {self.parry}, dodge = {self.dodge}'

@@ -93,4 +93,41 @@ class ClassTesting(unittest.TestCase):
 
         self.assertEqual(int(t), int(1000/warrior.initiative))
 
+    def test_take_damage(self):
+        rogue = Rogue("toto", "tata")
+        warrior = Warrior("toto", "tata")
+        priest = Priest("toto", "tata")
+        wizard = Wizard("toto", "tata")
+
+        fighters = [rogue, warrior, priest, wizard]
+
+        for fighter in fighters:
+            fighter: FighterInterface
+
+            heal_p_before = fighter.health_point
+            fighter.take_damage(95)
+            
+            dam = 95 - fighter.defense_value
+
+            print("vie start: {}".format(heal_p_before))
+            print("defense {}".format(fighter.defense_value))
+            print("damage: {}".format(dam))
+            print(fighter._class)
+
+            #test that defense is not ignore
+            comp = heal_p_before - dam
+            if comp < 0:
+                comp = 0
+            self.assertEqual(fighter.health_point, comp)
+
+            #test if defense point is bigger that the damage
+            heal_p_before = fighter.health_point
+            fighter.take_damage(20)
+            self.assertEqual(fighter.health_point, heal_p_before)
+
+            fighter.take_damage(1000)
+            self.assertEqual(fighter.health_point, 0)
+        
+
+
 
