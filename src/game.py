@@ -1,3 +1,5 @@
+from time import time
+from warnings import filters
 from src.Fighter_class.Fighter import FighterInterface
 from src.Fighter_class.Class import Warrior, Rogue, Wizard, Priest, Team
 from src.db.insert_db import insert_fighter
@@ -65,10 +67,11 @@ class Game():
         
         return teams
 
+    def battle(self):
+        for fighter in self.fighters:
+            fighter.start()
+            print(time())
+
 if __name__ == '__main__':
-    pass
-        
-
-
-
-    
+    game = Game()
+    game.battle()

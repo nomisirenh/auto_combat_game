@@ -14,12 +14,6 @@ class Warrior(FighterInterface):
         assert parry <= 60 and parry >= 40
         assert dodge == None
 
-    def will_attack(self) -> bool:
-        return super().will_attack()
-
-    def take_damage(self, damage):
-        return super().take_damage(damage)
-
 class Rogue(FighterInterface):
     def __init__(self, name, lastname, attack_value = randrange(40,61), defense_value = randrange(30, 51), health_point = randrange(70, 81)\
         , critical = randrange(15,21), initiative = randrange(75,91), parry = None, dodge = randrange(40,71), _class = "Rogue", id = None):
@@ -32,12 +26,6 @@ class Rogue(FighterInterface):
         assert initiative <= 90 and initiative >= 75
         assert parry == None
         assert dodge <= 71 and dodge >= 40
-
-    def will_attack(self) -> bool:
-        return super().will_attack()
-
-    def take_damage(self, damage):
-        return super().take_damage(damage)
 
 class Wizard(FighterInterface):
     def __init__(self, name, lastname, attack_value = randrange(100,151), defense_value = randrange(20, 41), health_point = randrange(60, 71)\
@@ -52,12 +40,6 @@ class Wizard(FighterInterface):
         assert parry == None
         assert dodge == None
 
-    def will_attack(self) -> bool:
-        return super().will_attack()
-
-    def take_damage(self, damage):
-        return super().take_damage(damage)
-
 class Priest(FighterInterface):
     def __init__(self, name, lastname, attack_value = randrange(30,61), defense_value = randrange(60, 81), health_point = randrange(70, 90)\
         , critical = randrange(5,7), initiative = randrange(50,60), parry = randrange(30,51), dodge = None, _class = "Priest", id = None):
@@ -71,20 +53,20 @@ class Priest(FighterInterface):
         assert parry <= 50 and parry >= 30
         assert dodge == None
 
-    def will_attack(self) -> bool:
-        return super().will_attack()
-
-    def take_damage(self, damage):
-        return super().take_damage(damage)
-
 class Team():
     def __init__(self, id, name: str, fighters: list[FighterInterface]):
         self.id = id
         self.name = name
         self.fighters = fighters
 
+        self.is_alive = 10
+
     def get_fighters(self):
         return self.fighters
+
+    def is_in(self, fighter: FighterInterface):
+        if fighter in self.fighters:
+            return True
 
     def team_str(self):
         """
