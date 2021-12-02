@@ -1,7 +1,7 @@
 import unittest
 from src.Fighter_class.Fighter import FighterInterface
 from src.Fighter_class.Class import *
-from random import randrange
+import time
 
 class ClassTesting(unittest.TestCase):
     def test_warrior(self):
@@ -81,3 +81,16 @@ class ClassTesting(unittest.TestCase):
         team  = Team(1, "red", fighter_list)
 
         self.assertEqual(team.get_fighters(), fighter_list)
+
+    def test_will_attack(self):
+        warrior = Warrior("toto", "tata")
+
+        start = time.time()
+        temp = warrior.will_attack()
+        end = time.time()
+
+        t = (end - start) * 1000
+
+        self.assertEqual(int(t), int(1000/warrior.initiative))
+
+

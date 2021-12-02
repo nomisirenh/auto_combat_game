@@ -17,12 +17,10 @@ class FighterInterface (ABC):
 
     @abstractmethod
     def will_attack(self) -> bool:
-        attack = False
-        last_time = int(time.time() * 1000)
-        if int(time.time() * 1000) == last_time + (1000/self.initiative):
-            attack = True
 
-        return attack
+        time.sleep((1000 / (self.initiative))/1000)
+
+        return True
 
     @abstractmethod
     def take_damage(self, damage):
