@@ -108,19 +108,21 @@ class ClassTesting(unittest.TestCase):
 
         fighters = [rogue, warrior, priest, wizard]
         priest_test = Priest("titi", "tete")
-        print(priest_test.attack_value)
 
+        #test when critical_attack = 0
         for fighter in fighters:
             fighter: FighterInterface
             priest_test.attack_value = 50
 
             heal_p_before = fighter.health_point
-            fighter.take_damage(priest_test)
+
+            priest_test.critical_attack = mock.Mock()
+            priest_test.critical_attack.return_value = 0
+            fighter.take_damage(priest_test, priest_test.critical_attack())
             
             dam = priest_test.attack_value - fighter.defense_value
             if dam < 0:
                 dam = 0
-
             #test that defense is not ignore
             #print("class: {}".format(fighter._class))
             #print("vie before: {}".format(heal_p_before))
@@ -128,18 +130,16 @@ class ClassTesting(unittest.TestCase):
             #print("defense: {}".format(fighter.defense_value))
             #print("damage: {}".format(dam))
             comp = heal_p_before - dam
-
-
             self.assertEqual(fighter.health_point, comp)
 
             #test if defense point is bigger that the damage
             heal_p_before = fighter.health_point
             priest_test.attack_value = 20
-            fighter.take_damage(priest_test)
+            fighter.take_damage(priest_test, priest_test.critical_attack())
             self.assertEqual(fighter.health_point, heal_p_before)
             
             priest_test.attack_value = 1000
-            fighter.take_damage(priest_test)
+            fighter.take_damage(priest_test, priest_test.critical_attack())
             self.assertEqual(fighter.health_point, 0)
 
     def test_critical_attack(self):
@@ -165,6 +165,12 @@ class ClassTesting(unittest.TestCase):
 
         wizard = Wizard("toto", "tata")
         self.assertFalse(wizard.parry_or_dodge())
+
+        warrior = Warrior("toto", "tata")
+        self.assertFalse(warrior.parry_or_dodge())
+
+        src.Fighter_class.Fighter.randrange.return_value = 2
+        self.assertTrue(warrior.parry_or_dodge())
 
     def test_set_hp(self):
         rogue = Rogue("toto", "tata")
@@ -193,3 +199,10 @@ class ClassTesting(unittest.TestCase):
         priest.heal(wizard)
 
         self.assertEqual(wizard.health_point, wizard.max_hp)
+
+    def test_str(self):
+        priest = Priest("toto", "tata")
+        
+        self.assertIn(str(priest.id), priest.__str__())
+        self.assertIn(str(priest.name), priest.__str__())
+        self.assertIn(str(priest.lastname), priest.__str__())

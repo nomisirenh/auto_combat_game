@@ -29,14 +29,20 @@ class FighterInterface (ABC, threading.Thread):
 
         return True
 
-    def critical_attack(self):
+    def critical_attack(self) -> bool:
+        """
+        Return true or false depending on the chance of critical
+        """
         i = randrange(0,100)
         if i <= self.critical:
             return True
         else:
             return False
 
-    def parry_or_dodge(self):
+    def parry_or_dodge(self) -> bool:
+        """
+        Return true or false if the fighter parry or dodge
+        """
         i = randrange(0,100)
         pod = None
         if self.parry:
@@ -54,9 +60,16 @@ class FighterInterface (ABC, threading.Thread):
 
         return pod
 
-    def take_damage(self, fighter: 'FighterInterface'):
+    def take_damage(self, fighter: 'FighterInterface', critical: bool):
+        """
+        Set heal point depending on attacker attack value and if it's a critical attack
+        """
         heal_p = self.health_point
-        true_damage = fighter.attack_value - self.defense_value
+        if critical:
+            true_damage = fighter.attack_value
+        else:
+            true_damage = fighter.attack_value - self.defense_value
+
         if true_damage < 0:
             true_damage = 0
 

@@ -72,9 +72,15 @@ class Team():
         self.is_alive = 10
 
     def get_fighters(self):
+        """
+        Return a list of all fighters in the team
+        """
         return self.fighters
 
     def is_in(self, fighter: FighterInterface):
+        """
+        Verify if the fighter is in the team
+        """
         if fighter in self.fighters:
             return True
 
