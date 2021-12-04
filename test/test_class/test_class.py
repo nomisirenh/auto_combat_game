@@ -93,6 +93,11 @@ class ClassTesting(unittest.TestCase):
         warrior = Warrior("toto", "tata")
         priest = Priest("foo", "bar")
         
+        #To not parry
+        src.Fighter_class.Fighter.randrange = mock.Mock()
+        src.Fighter_class.Fighter.randrange.return_value = 90
+
+        #Small life to be sure he die
         priest.is_alive = mock.Mock()
         priest.is_alive.return_value = 1
         priest.health_point = 2
@@ -166,9 +171,11 @@ class ClassTesting(unittest.TestCase):
         src.Fighter_class.Fighter.randrange.return_value = 2
 
         rogue = Rogue("toto", "tata")
-        self.assertTrue(rogue.parry_or_dodge())
+        pod = rogue.parry_or_dodge()
+        self.assertEqual(pod, "DODGE")
 
         src.Fighter_class.Fighter.randrange.return_value = 90
+        pod = rogue.parry_or_dodge()
         self.assertFalse(rogue.parry_or_dodge())
 
         wizard = Wizard("toto", "tata")
@@ -178,7 +185,8 @@ class ClassTesting(unittest.TestCase):
         self.assertFalse(warrior.parry_or_dodge())
 
         src.Fighter_class.Fighter.randrange.return_value = 2
-        self.assertTrue(warrior.parry_or_dodge())
+        pod = warrior.parry_or_dodge()
+        self.assertEqual(pod, "PARRY")
 
     def test_set_hp(self):
         rogue = Rogue("toto", "tata")
@@ -224,3 +232,26 @@ class ClassTesting(unittest.TestCase):
         team = Team(1, "blue",fighters=f)
 
         self.assertEqual(team.fighters_alive(), 4)
+
+    def test_set_enemy(self):
+        rogue = Rogue("toto", "tata")
+        warrior = Warrior("toto", "tata")
+        priest = Priest("toto", "tata")
+        wizard = Wizard("toto", "tata")
+
+        en = [rogue, warrior, priest, wizard]
+
+        rogue2 = Rogue("toto", "tata")
+        warrior2 = Warrior("toto", "tata")
+        priest2 = Priest("toto", "tata")
+        wizard2 = Wizard("toto", "tata")
+
+        all = [rogue2, warrior2, priest2, wizard2]
+
+        rogue2 = Rogue("toto", "tata")
+
+        rogue2.set_ally_team(all)
+        rogue2.set_enemy_team(en)
+
+        self.assertEqual(rogue2.enemy_team, en)
+        self.assertEqual(rogue2.ally_team, all)

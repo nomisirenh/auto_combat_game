@@ -35,11 +35,15 @@ class FighterInterface (ABC, threading.Thread):
         """
         
         if enemy.is_alive() and not self.is_dead:
-            dam = enemy.take_damage(self, 0)
-            print(f"{self} ATTAQUE {enemy} ({dam} dam)")
-            if enemy.is_dead and enemy in self.enemy_team:
-                self.enemy_team.pop(self.enemy_team.index(enemy))
-                print(f'-------------------{enemy} est mort')
+            pod = enemy.parry_or_dodge()
+            if pod != False:
+                print(f"{self} ATTAQUE {enemy} {pod} !")
+            else:
+                dam = enemy.take_damage(self, 0)
+                print(f"{self} ATTAQUE {enemy} ({dam} dam)")
+                if enemy.is_dead and enemy in self.enemy_team:
+                    self.enemy_team.pop(self.enemy_team.index(enemy))
+                    print(f'-------------------{enemy} est mort')
             
 
         #return True
@@ -54,7 +58,7 @@ class FighterInterface (ABC, threading.Thread):
         else:
             return False
 
-    def parry_or_dodge(self) -> bool:
+    def parry_or_dodge(self):
         """
         Return true or false if the fighter parry or dodge
         """
@@ -62,12 +66,12 @@ class FighterInterface (ABC, threading.Thread):
         pod = None
         if self.parry:
             if i <= self.parry:
-                pod = True
+                pod = "PARRY"
             else:
                 pod = False
         elif self.dodge:
             if i <= self.dodge:
-                pod = True
+                pod = "DODGE"
             else:
                 pod = False
         else:
@@ -102,6 +106,12 @@ class FighterInterface (ABC, threading.Thread):
         Hp to max, use for priest to heal
         """
         self.health_point = self.max_hp
+
+    def set_enemy_team(self, enemies):
+        self.enemy_team = enemies
+
+    def set_ally_team(self, allies):
+        self.ally_team = allies
 
     def run(self) -> None:
         for enemy in self.enemy_team:

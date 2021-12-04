@@ -79,11 +79,11 @@ class Game():
         print("")
         for fighter in self.fighters:
             if fighter in self.teams[0].fighters:
-                fighter.enemy_team = self.teams[1].fighters
-                fighter.ally_team = self.teams[0].fighters
+                fighter.set_enemy_team(self.teams[1].fighters)
+                fighter.set_ally_team(self.teams[0].fighters)
             else:
-                fighter.enemy_team = self.teams[0].fighters
-                fighter.ally_team = self.teams[1].fighters
+                fighter.set_enemy_team(self.teams[0].fighters)
+                fighter.set_ally_team(self.teams[1].fighters)
 
         for fighter in self.fighters:
             fighter.start()
