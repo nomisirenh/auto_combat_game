@@ -3,6 +3,7 @@ from unittest import mock
 import src.Fighter_class.Fighter
 from src.Fighter_class.Fighter import FighterInterface
 from src.Fighter_class.Class import *
+from src.Fighter_class.Team import Team
 import time
 
 class ClassTesting(unittest.TestCase):
@@ -86,19 +87,28 @@ class ClassTesting(unittest.TestCase):
         team  = Team(1, "red", fighter_list)
 
         self.assertEqual(team.get_fighters(), fighter_list)
-        self.assertTrue(team.is_in(warrior))
-        self.assertFalse(team.is_in(wizard))
+        
 
-    def test_will_attack(self):
+    def test_attack(self):
         warrior = Warrior("toto", "tata")
+        priest = Priest("foo", "bar")
+        
+        priest.is_alive = mock.Mock()
+        priest.is_alive.return_value = 1
+        priest.health_point = 2
+        priest.defense_value = 2
+        
+        warrior.enemy_team = [priest]
+        warrior.attack(priest)
+        self.assertTrue(priest.is_dead)
 
-        start = time.time()
-        temp = warrior.will_attack()
-        end = time.time()
+        priest.is_dead = False
+        warrior.is_dead = True
+        warrior.attack(priest)
 
-        t = (end - start) * 1000
+        self.assertFalse(priest.is_dead)
 
-        self.assertEqual(int(t), int(1000/warrior.initiative))
+        
 
     def test_take_damage(self):
         rogue = Rogue("toto", "tata")
@@ -203,6 +213,5 @@ class ClassTesting(unittest.TestCase):
     def test_str(self):
         priest = Priest("toto", "tata")
         
-        self.assertIn(str(priest.id), priest.__str__())
         self.assertIn(str(priest.name), priest.__str__())
         self.assertIn(str(priest.lastname), priest.__str__())

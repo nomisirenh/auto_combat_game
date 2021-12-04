@@ -1,7 +1,7 @@
-from time import time
-from warnings import filters
+from os import SEEK_CUR
 from src.Fighter_class.Fighter import FighterInterface
-from src.Fighter_class.Class import Warrior, Rogue, Wizard, Priest, Team
+from src.Fighter_class.Class import Warrior, Rogue, Wizard, Priest
+from src.Fighter_class.Team import Team
 from src.db.insert_db import insert_fighter
 from src.db.get_db import get_random_fighter, get_random_team
 from src.Fighter_class.NameGenerator import name_generator
@@ -70,10 +70,31 @@ class Game():
         
         return teams
 
-    def battle(self):
+    def do_fight(self):
+        print("=================DEBUT DE LA BATTAILLE=================")
+        for team in self.teams:
+            team.team_str()
+
+        print("")
+        for fighter in self.fighters:
+            if fighter in self.teams[0].fighters:
+                fighter.enemy_team = self.teams[1].fighters
+                fighter.ally_team = self.teams[0].fighters
+            else:
+                fighter.enemy_team = self.teams[0].fighters
+                fighter.ally_team = self.teams[1].fighters
+
         for fighter in self.fighters:
             fighter.start()
-            print(time())
+
+        for fighter in self.fighters:
+            fighter.join()
+
+        print("")
+        print("=================FIN DE BATTAILLE=================")
+        for team in self.teams:
+            team.team_str()
 
 if __name__ == '__main__':
-    pass
+    game = Game()
+    game.do_fight()

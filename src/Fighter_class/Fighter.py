@@ -1,9 +1,13 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 import time
 import threading
-from random import randrange
+from random import randrange, choice
+
+from src.Fighter_class.Team import Team
 
 class FighterInterface (ABC, threading.Thread):
+    enemy_team: list['FighterInterface']
+    ally_team: list['FighterInterface']
     def __init__(self, name, lastname, attack_value, defense_value, health_point, critical, initiative, parry, dodge, _class, id):
         threading.Thread.__init__(self)
         self.name = name
@@ -20,14 +24,25 @@ class FighterInterface (ABC, threading.Thread):
         
         self.max_hp = health_point
         self.is_dead = False
+        
+        self.enemy_team = None
+        self.ally_team = False
+        self.lock = threading.Lock()
 
-    def will_attack(self) -> bool:
+    def attack(self, enemy: 'FighterInterface'):
         """
-        Wait 1000ms / initiative
+        Attaque an enemy
         """
-        time.sleep(int((1000 / (self.initiative)))/1000)
+        
+        if enemy.is_alive() and not self.is_dead:
+            dam = enemy.take_damage(self, 0)
+            print(f"{self} ATTAQUE {enemy} ({dam} dam)")
+            if enemy.is_dead and enemy in self.enemy_team:
+                self.enemy_team.pop(self.enemy_team.index(enemy))
+                print(f'-------------------{enemy} est mort')
+            
 
-        return True
+        #return True
 
     def critical_attack(self) -> bool:
         """
@@ -74,11 +89,13 @@ class FighterInterface (ABC, threading.Thread):
             true_damage = 0
 
         heal_p = self.health_point - true_damage
-        if heal_p < 0:
+        if heal_p <= 0:
             self.health_point = 0
             self.is_dead = True
         else:
             self.health_point = heal_p
+
+        return true_damage
 
     def set_hp_max(self):
         """
@@ -87,9 +104,25 @@ class FighterInterface (ABC, threading.Thread):
         self.health_point = self.max_hp
 
     def run(self) -> None:
-        #while self.is_dead is not True:
-        print(self)
+        for enemy in self.enemy_team:
+            while enemy.is_alive() == False:
+                pass
 
+        for ally in self.ally_team:
+            while ally.is_alive() == False:
+                pass
+        
+        while not self.is_dead and len(self.enemy_team) != 0:
+            time.sleep(int((1000 / (self.initiative)))/1000)
+            if not len(self.enemy_team):
+                break
+            else:
+                enemy = choice(self.enemy_team)
+
+            if enemy.is_alive():
+                with enemy.lock:
+                    self.attack(enemy)
+    
     def __str__(self) -> str:
         #return f'{self.id},{self._class}, {self.name}, {self.lastname}, attaque = {self.attack_value}, defense = {self.defense_value}, health = {self.health_point}, critical = {self.critical}, initiative = {self.initiative}, parry = {self.parry}, dodge = {self.dodge}'
-        return f'{self.id},{self._class}, {self.name} {self.lastname}'
+        return f'{self._class}, {self.name} {self.lastname}, {self.health_point} hp'

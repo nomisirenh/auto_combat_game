@@ -63,36 +63,7 @@ class Priest(FighterInterface):
         else:
             fighter.set_hp_max()
 
-class Team():
-    def __init__(self, id, name: str, fighters: list[FighterInterface]):
-        self.id = id
-        self.name = name
-        self.fighters = fighters
 
-        self.is_alive = 10
-
-    def get_fighters(self):
-        """
-        Return a list of all fighters in the team
-        """
-        return self.fighters
-
-    def is_in(self, fighter: FighterInterface):
-        """
-        Verify if the fighter is in the team
-        """
-        if fighter in self.fighters:
-            return True
-
-    def team_str(self):
-        """
-        Print all fighters that is in the team
-        """
-        print(f'Equipe {self.name} contient:')
-        
-        for fighter in self.fighters:
-            print("--> ", end="")
-            print(fighter)
         
 
 if __name__ == '__main__':
