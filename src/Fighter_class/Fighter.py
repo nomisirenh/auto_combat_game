@@ -31,19 +31,25 @@ class FighterInterface (ABC, threading.Thread):
 
     def attack(self, enemy: 'FighterInterface'):
         """
-        Attaque an enemy
+        Attack an enemy
         """
         
         if enemy.is_alive() and not self.is_dead:
             pod = enemy.parry_or_dodge()
             if pod != False:
-                print(f"{self} ATTAQUE {enemy} {pod} !")
+                print(f"{self} ATTACK {enemy} {pod} !")
             else:
-                dam = enemy.take_damage(self, 0)
-                print(f"{self} ATTAQUE {enemy} ({dam} dam)")
+                
+                if self.critical_attack():
+                    dam = enemy.take_damage(self, 1)
+                    print(f"{self} ATTACK {enemy} ({dam} dam) CRITICAL !")
+                else:
+                    dam = enemy.take_damage(self, 0)
+                    print(f"{self} ATTACK {enemy} ({dam} dam)")
+
                 if enemy.is_dead and enemy in self.enemy_team:
                     self.enemy_team.pop(self.enemy_team.index(enemy))
-                    print(f'-------------------{enemy} est mort')
+                    print(f'-------------------{enemy} IS DEAD')
             
 
         #return True

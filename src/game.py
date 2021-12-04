@@ -71,7 +71,7 @@ class Game():
         return teams
 
     def do_fight(self):
-        print("=================DEBUT DE LA BATTAILLE=================")
+        print("=================BATTLE START=================")
         for team in self.teams:
             team.team_str()
             
@@ -92,7 +92,7 @@ class Game():
             fighter.join()
 
         print("")
-        print("=================FIN DE BATTAILLE=================")
+        print("=================BATTLE END=================")
         for team in self.teams:
             team.team_str()
             print(f"Combattant(s) en vie: {team.fighters_alive()}/10")

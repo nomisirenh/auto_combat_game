@@ -103,6 +103,8 @@ class ClassTesting(unittest.TestCase):
         priest.health_point = 2
         priest.defense_value = 2
         
+        warrior.critical_attack = mock.Mock()
+        warrior.critical_attack.return_value = 0
         warrior.enemy_team = [priest]
         warrior.attack(priest)
         self.assertTrue(priest.is_dead)
