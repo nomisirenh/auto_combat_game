@@ -257,3 +257,9 @@ class ClassTesting(unittest.TestCase):
 
         self.assertEqual(rogue2.enemy_team, en)
         self.assertEqual(rogue2.ally_team, all)
+
+    def test_fighter_set_color(self):
+        rogue = Rogue("toto", "tata")
+        rogue.set_color("\033[32m")
+
+        self.assertEqual(rogue.team_color, "\033[32m")

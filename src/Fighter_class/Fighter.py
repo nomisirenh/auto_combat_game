@@ -2,8 +2,7 @@ from abc import ABC
 import time
 import threading
 from random import randrange, choice
-
-from src.Fighter_class.Team import Team
+from src.misc.color import colors
 
 class FighterInterface (ABC, threading.Thread):
     enemy_team: list['FighterInterface']
@@ -26,7 +25,8 @@ class FighterInterface (ABC, threading.Thread):
         self.is_dead = False
         
         self.enemy_team = None
-        self.ally_team = False
+        self.ally_team = None
+        self.team_color = None
         self.lock = threading.Lock()
 
     def attack(self, enemy: 'FighterInterface'):
@@ -37,19 +37,19 @@ class FighterInterface (ABC, threading.Thread):
         if enemy.is_alive() and not self.is_dead:
             pod = enemy.parry_or_dodge()
             if pod != False:
-                print(f"{self} ATTACK {enemy} {pod} !")
+                print(f"{self} ATTACK {enemy} {colors.fgYellow}{pod} !{colors.reset}")
             else:
                 
-                if self.critical_attack():
+                if self.critical_attack() and not enemy.is_dead:
                     dam = enemy.take_damage(self, 1)
-                    print(f"{self} ATTACK {enemy} ({dam} dam) CRITICAL !")
+                    print(f"{self} ATTACK {enemy} {colors.fgRed}({dam} dam){colors.reset} {colors.fgYellow}CRITICAL !{colors.reset}")
                 else:
                     dam = enemy.take_damage(self, 0)
-                    print(f"{self} ATTACK {enemy} ({dam} dam)")
+                    print(f"{self} ATTACK {enemy} {colors.fgRed}({dam} dam){colors.reset}")
 
                 if enemy.is_dead and enemy in self.enemy_team:
                     self.enemy_team.pop(self.enemy_team.index(enemy))
-                    print(f'-------------------{enemy} IS DEAD')
+                    print(f'-------------------{enemy} {colors.fgYellow}IS DEAD !{colors.reset}')
             
 
         #return True
@@ -119,6 +119,9 @@ class FighterInterface (ABC, threading.Thread):
     def set_ally_team(self, allies):
         self.ally_team = allies
 
+    def set_color(self, color):
+        self.team_color = color
+
     def run(self) -> None:
         for enemy in self.enemy_team:
             while enemy.is_alive() == False:
@@ -141,4 +144,7 @@ class FighterInterface (ABC, threading.Thread):
     
     def __str__(self) -> str:
         #return f'{self.id},{self._class}, {self.name}, {self.lastname}, attaque = {self.attack_value}, defense = {self.defense_value}, health = {self.health_point}, critical = {self.critical}, initiative = {self.initiative}, parry = {self.parry}, dodge = {self.dodge}'
-        return f'{self._class}, {self.name} {self.lastname}, {self.health_point} hp'
+        if self.team_color:
+            return f'{self._class}, {self.team_color}{self.name} {self.lastname}{colors.reset}, {self.health_point} hp'
+        else:
+            return f'{self._class}, {self.name} {self.lastname}, {self.health_point} hp'

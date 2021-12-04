@@ -1,10 +1,9 @@
-from os import SEEK_CUR
 from src.Fighter_class.Fighter import FighterInterface
 from src.Fighter_class.Class import Warrior, Rogue, Wizard, Priest
 from src.Fighter_class.Team import Team
 from src.db.insert_db import insert_fighter
 from src.db.get_db import get_random_fighter, get_random_team
-from src.Fighter_class.NameGenerator import name_generator
+from src.misc.NameGenerator import name_generator
 from random import randrange
 
 class Game():
@@ -65,6 +64,10 @@ class Game():
 
         for data in datas:
             team = Team(id = data[0], name = data[1],fighters = mid)
+            if team.name == "Blue":
+                team.color = "\033[34m"
+            else:
+                team.color = "\033[32m"
             mid = self.fighters[:10]
             teams.append(team)
         
@@ -81,9 +84,12 @@ class Game():
             if fighter in self.teams[0].fighters:
                 fighter.set_enemy_team(self.teams[1].fighters)
                 fighter.set_ally_team(self.teams[0].fighters)
+                fighter.set_color(self.teams[0].color)
+
             else:
                 fighter.set_enemy_team(self.teams[0].fighters)
                 fighter.set_ally_team(self.teams[1].fighters)
+                fighter.set_color(self.teams[1].color)
 
         for fighter in self.fighters:
             fighter.start()
@@ -95,7 +101,7 @@ class Game():
         print("=================BATTLE END=================")
         for team in self.teams:
             team.team_str()
-            print(f"Combattant(s) en vie: {team.fighters_alive()}/10")
+            print(f"=> Combattant(s) en vie: {team.fighters_alive()}/10")
 
 if __name__ == '__main__':
     game = Game()

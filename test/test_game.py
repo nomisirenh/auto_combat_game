@@ -1,5 +1,6 @@
 import unittest
-from src.Fighter_class.Class import Warrior
+from unittest import mock
+import src.Fighter_class.Fighter
 from src.game import Game
 from src.Fighter_class.Fighter import FighterInterface
 
@@ -28,3 +29,25 @@ class Game_testing(unittest.TestCase):
         #verify that the fighters in team 1 are not in team 2
         for fighter in team1.fighters:
             self.assertNotIn(fighter, team2.fighters)
+
+    @mock.patch('src.Fighter_class.Fighter.threading.Thread.start', return_value=True)
+    @mock.patch('src.Fighter_class.Fighter.threading.Thread.join', return_value=True)
+    def test_do_fight(self, mock_tread_start, mock_thread_join):
+        
+        game = Game()
+        game.do_fight()
+
+        f = game.fighters[1]
+
+        if f in game.teams[0].fighters:
+            f_allies = game.teams[0].fighters
+            f_enemies = game.teams[1].fighters
+        else:
+            f_allies = game.teams[1].fighters
+            f_enemies = game.teams[0].fighters
+
+        self.assertEqual(f.ally_team, f_allies)
+        self.assertEqual(f.enemy_team, f_enemies)
+
+    def test_generate_new_fighter(self):
+        pass
