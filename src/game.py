@@ -74,6 +74,7 @@ class Game():
         print("=================DEBUT DE LA BATTAILLE=================")
         for team in self.teams:
             team.team_str()
+            
 
         print("")
         for fighter in self.fighters:
@@ -94,6 +95,7 @@ class Game():
         print("=================FIN DE BATTAILLE=================")
         for team in self.teams:
             team.team_str()
+            print(f"Combattant(s) en vie: {team.fighters_alive()}/10")
 
 if __name__ == '__main__':
     game = Game()

@@ -108,8 +108,6 @@ class ClassTesting(unittest.TestCase):
 
         self.assertFalse(priest.is_dead)
 
-        
-
     def test_take_damage(self):
         rogue = Rogue("toto", "tata")
         warrior = Warrior("toto", "tata")
@@ -215,3 +213,14 @@ class ClassTesting(unittest.TestCase):
         
         self.assertIn(str(priest.name), priest.__str__())
         self.assertIn(str(priest.lastname), priest.__str__())
+
+    def test_team_alive(self):
+        rogue = Rogue("toto", "tata")
+        warrior = Warrior("toto", "tata")
+        priest = Priest("toto", "tata")
+        wizard = Wizard("toto", "tata")
+
+        f = [rogue, warrior, priest, wizard]
+        team = Team(1, "blue",fighters=f)
+
+        self.assertEqual(team.fighters_alive(), 4)
