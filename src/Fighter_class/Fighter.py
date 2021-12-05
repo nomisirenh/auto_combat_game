@@ -112,7 +112,8 @@ class FighterInterface (ABC, threading.Thread):
         """
         Hp to max, use for priest to heal
         """
-        self.health_point = self.max_hp
+        with self.lock:
+            self.health_point = self.max_hp
 
     def set_enemy_team(self, enemies):
         self.enemy_team = enemies

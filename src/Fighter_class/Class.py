@@ -1,5 +1,7 @@
 from src.Fighter_class.Fighter import FighterInterface
-from random import randrange
+from random import choice, randrange
+from src.misc.color import colors
+import time
 
 class Warrior(FighterInterface):
     def __init__(self, name, lastname, attack_value = randrange(70,91), defense_value = randrange(70, 91), health_point = randrange(120, 151)\
@@ -59,12 +61,45 @@ class Priest(FighterInterface):
             if hp > self.max_hp:
                 self.set_hp_max()
             else:
-                self.health_point = hp
+                with self.lock:
+                    self.health_point = hp
+            print(f'{self} {colors.fgMagenta}HEAL HIMSELF{colors.reset}')
         else:
             fighter.set_hp_max()
+            print(f'{self} {colors.fgMagenta}HEAL{colors.reset} {fighter}')
 
+    def run(self) -> None:
+        for enemy in self.enemy_team:
+            while enemy.is_alive() == False:
+                pass
 
+        for ally in self.ally_team:
+            while ally.is_alive() == False:
+                pass
         
+        while not self.is_dead and len(self.enemy_team) != 0:
+            time.sleep(int((1000 / (self.initiative)))/1000)
+            i = randrange(0,2)
+            if i == 0:
+                if not len(self.enemy_team):
+                    break
+                else:
+                    enemy = choice(self.enemy_team)
+
+                if enemy.is_alive():
+                    #with enemy.lock:
+                    self.attack(enemy)
+            else:
+                if not len(self.ally_team):
+                    break
+                else:
+                    ally = choice(self.ally_team)
+                    while ally.health_point == ally.max_hp:
+                        ally = choice(self.ally_team)
+
+                    if ally.is_alive():
+                        #with enemy.lock:
+                        self.heal(ally)        
 
 if __name__ == '__main__':
     pass
