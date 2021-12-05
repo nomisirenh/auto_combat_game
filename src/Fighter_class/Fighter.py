@@ -49,7 +49,7 @@ class FighterInterface (ABC, threading.Thread):
 
                 if enemy.is_dead and enemy in self.enemy_team:
                     self.enemy_team.pop(self.enemy_team.index(enemy))
-                    print(f'-------------------{enemy} {colors.fgYellow}IS DEAD !{colors.reset}')
+                    print(f'                    {enemy} {colors.fgYellow}IS DEAD !{colors.reset}')
             
 
         #return True

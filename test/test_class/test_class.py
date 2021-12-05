@@ -6,6 +6,8 @@ from src.Fighter_class.Class import *
 from src.Fighter_class.Team import Team
 import time
 
+from src.game import Game
+
 class ClassTesting(unittest.TestCase):
     def test_warrior(self):
         warrior = Warrior("toto","tata")
@@ -263,3 +265,9 @@ class ClassTesting(unittest.TestCase):
         rogue.set_color("\033[32m")
 
         self.assertEqual(rogue.team_color, "\033[32m")
+
+
+
+
+
+
