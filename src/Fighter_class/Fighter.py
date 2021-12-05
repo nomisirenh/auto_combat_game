@@ -89,23 +89,24 @@ class FighterInterface (ABC, threading.Thread):
         """
         Set heal point depending on attacker attack value and if it's a critical attack
         """
-        heal_p = self.health_point
-        if critical:
-            true_damage = fighter.attack_value
-        else:
-            true_damage = fighter.attack_value - self.defense_value
+        with self.lock:
+            heal_p = self.health_point
+            if critical:
+                true_damage = fighter.attack_value
+            else:
+                true_damage = fighter.attack_value - self.defense_value
 
-        if true_damage < 0:
-            true_damage = 0
+            if true_damage < 0:
+                true_damage = 0
 
-        heal_p = self.health_point - true_damage
-        if heal_p <= 0:
-            self.health_point = 0
-            self.is_dead = True
-        else:
-            self.health_point = heal_p
+            heal_p = self.health_point - true_damage
+            if heal_p <= 0:
+                self.health_point = 0
+                self.is_dead = True
+            else:
+                self.health_point = heal_p
 
-        return true_damage
+            return true_damage
 
     def set_hp_max(self):
         """
@@ -139,8 +140,8 @@ class FighterInterface (ABC, threading.Thread):
                 enemy = choice(self.enemy_team)
 
             if enemy.is_alive():
-                with enemy.lock:
-                    self.attack(enemy)
+                #with enemy.lock:
+                self.attack(enemy)
     
     def __str__(self) -> str:
         #return f'{self.id},{self._class}, {self.name}, {self.lastname}, attaque = {self.attack_value}, defense = {self.defense_value}, health = {self.health_point}, critical = {self.critical}, initiative = {self.initiative}, parry = {self.parry}, dodge = {self.dodge}'
