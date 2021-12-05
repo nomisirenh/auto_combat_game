@@ -30,13 +30,6 @@ class Game_testing(unittest.TestCase):
         for fighter in team1.fighters:
             self.assertNotIn(fighter, team2.fighters)
 
-    @mock.patch('src.Fighter_class.Fighter.threading.Thread.start', return_value=True)
-    @mock.patch('src.Fighter_class.Fighter.threading.Thread.join', return_value=True)
-    def test_do_fight(self, mock_tread_start, mock_thread_join):
-        
-        game = Game()
-        game.do_fight()
-
         f = game.fighters[1]
 
         if f in game.teams[0].fighters:
@@ -48,6 +41,13 @@ class Game_testing(unittest.TestCase):
 
         self.assertEqual(f.ally_team, f_allies)
         self.assertEqual(f.enemy_team, f_enemies)
+
+    @mock.patch('src.Fighter_class.Fighter.threading.Thread.start', return_value=True)
+    @mock.patch('src.Fighter_class.Fighter.threading.Thread.join', return_value=True)
+    def test_do_fight(self, mock_tread_start, mock_thread_join):
+        
+        game = Game()
+        game.do_fight()
 
     def test_generate_new_fighter(self):
         pass

@@ -60,6 +60,7 @@ class Game():
         """
         datas = get_random_team()
         teams = list()
+        teams: list[Team]
         mid = self.fighters[10:]
 
         for data in datas:
@@ -71,6 +72,17 @@ class Game():
             mid = self.fighters[:10]
             teams.append(team)
         
+        for fighter in self.fighters:
+            if fighter in teams[0].fighters:
+                fighter.set_enemy_team(teams[1].fighters)
+                fighter.set_ally_team(teams[0].fighters)
+                fighter.set_color(teams[0].color)
+
+            else:
+                fighter.set_enemy_team(teams[0].fighters)
+                fighter.set_ally_team(teams[1].fighters)
+                fighter.set_color(teams[1].color)
+        
         return teams
 
     def do_fight(self):
@@ -80,16 +92,7 @@ class Game():
             
 
         print("")
-        for fighter in self.fighters:
-            if fighter in self.teams[0].fighters:
-                fighter.set_enemy_team(self.teams[1].fighters)
-                fighter.set_ally_team(self.teams[0].fighters)
-                fighter.set_color(self.teams[0].color)
-
-            else:
-                fighter.set_enemy_team(self.teams[0].fighters)
-                fighter.set_ally_team(self.teams[1].fighters)
-                fighter.set_color(self.teams[1].color)
+        
 
         for fighter in self.fighters:
             fighter.start()
