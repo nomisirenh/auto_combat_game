@@ -4,8 +4,8 @@ from src.misc.color import colors
 import time
 
 class Warrior(FighterInterface):
-    def __init__(self, name, lastname, attack_value = randrange(70,91), defense_value = randrange(70, 91), health_point = randrange(120, 151)\
-        , critical = randrange(5,8), initiative = randrange(40,61), parry = randrange(40,61), dodge = None, _class = "warrior", id = None):
+    def __init__(self, name, lastname, attack_value, defense_value, health_point\
+        , critical, initiative, parry, dodge = None, _class = "warrior", id = None):
         super().__init__(name, lastname, attack_value, defense_value, health_point, critical, initiative, parry, dodge, _class, id)
 
         assert attack_value <= 90 and attack_value >= 70
@@ -17,8 +17,8 @@ class Warrior(FighterInterface):
         assert dodge == None
 
 class Rogue(FighterInterface):
-    def __init__(self, name, lastname, attack_value = randrange(40,61), defense_value = randrange(30, 51), health_point = randrange(70, 81)\
-        , critical = randrange(15,21), initiative = randrange(75,91), parry = None, dodge = randrange(40,71), _class = "Rogue", id = None):
+    def __init__(self, name, lastname, attack_value, defense_value, health_point \
+        , critical, initiative, parry, dodge, _class = "Rogue", id = None):
         super().__init__(name, lastname, attack_value, defense_value, health_point, critical, initiative, parry, dodge, _class, id)
 
         assert attack_value <= 60 and attack_value >= 40
@@ -30,8 +30,8 @@ class Rogue(FighterInterface):
         assert dodge <= 71 and dodge >= 40
 
 class Wizard(FighterInterface):
-    def __init__(self, name, lastname, attack_value = randrange(100,151), defense_value = randrange(20, 41), health_point = randrange(60, 71)\
-        , critical = randrange(5,7), initiative = randrange(75,91), parry = None, dodge = None, _class = "Wizard", id = None):
+    def __init__(self, name, lastname, attack_value, defense_value , health_point \
+        , critical , initiative , parry = None, dodge = None, _class = "Wizard", id = None):
         super().__init__(name, lastname, attack_value, defense_value, health_point, critical, initiative, parry, dodge, _class, id)
 
         assert attack_value <= 150 and attack_value >= 100
@@ -43,8 +43,8 @@ class Wizard(FighterInterface):
         assert dodge == None
 
 class Priest(FighterInterface):
-    def __init__(self, name, lastname, attack_value = randrange(30,61), defense_value = randrange(60, 81), health_point = randrange(70, 90)\
-        , critical = randrange(5,7), initiative = randrange(50,60), parry = randrange(30,51), dodge = None, _class = "Priest", id = None):
+    def __init__(self, name, lastname, attack_value , defense_value, health_point \
+        , critical , initiative , parry , dodge = None, _class = "Priest", id = None):
         super().__init__(name, lastname, attack_value, defense_value, health_point, critical, initiative, parry, dodge, _class, id)
 
         assert attack_value <= 60 and attack_value >= 30
@@ -58,9 +58,9 @@ class Priest(FighterInterface):
     def heal(self, fighter:FighterInterface):
         if fighter == self:
             hp = self.health_point + (self.defense_value//4)
-            if hp > self.max_hp:
+            if hp > self.max_hp and not self.is_dead:
                 self.set_hp_max()
-            else:
+            elif not self.is_dead:
                 with self.lock:
                     self.health_point = hp
             print(f'{self} {colors.fgMagenta}HEAL HIMSELF{colors.reset}')
@@ -70,13 +70,17 @@ class Priest(FighterInterface):
                 print(f'{self} {colors.fgMagenta}HEAL{colors.reset} {fighter}')
 
     def run(self) -> None:
-        for enemy in self.enemy_team:
+        fighters = self.enemy_team + self.ally_team
+        for f in fighters:
+            while not f.is_alive():
+                pass
+        """for enemy in self.enemy_team:
             while enemy.is_alive() == False:
                 pass
 
         for ally in self.ally_team:
             while ally.is_alive() == False:
-                pass
+                pass"""
         
         while not self.is_dead and len(self.enemy_team) != 0:
             time.sleep(int((1000 / (self.initiative)))/1000)
@@ -95,7 +99,7 @@ class Priest(FighterInterface):
                     break
                 else:
                     ally = choice(self.ally_team)
-                    while ally.health_point == ally.max_hp and ally.is_alive():
+                    while ally.health_point == ally.max_hp and self.is_alive() and len(self.enemy_team) != 0:
                         ally = choice(self.ally_team)
 
                     if ally.is_alive():

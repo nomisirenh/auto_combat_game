@@ -43,7 +43,7 @@ class FighterInterface (ABC, threading.Thread):
                 if self.critical_attack() and not enemy.is_dead:
                     dam = enemy.take_damage(self, 1)
                     print(f"{self} ATTACK {enemy} {colors.fgRed}({dam} dam){colors.reset} {colors.fgYellow}CRITICAL !{colors.reset}")
-                else:
+                elif not enemy.is_dead:
                     dam = enemy.take_damage(self, 0)
                     print(f"{self} ATTACK {enemy} {colors.fgRed}({dam} dam){colors.reset}")
 
@@ -125,13 +125,17 @@ class FighterInterface (ABC, threading.Thread):
         self.team_color = color
 
     def run(self) -> None:
-        for enemy in self.enemy_team:
+        fighters = self.enemy_team + self.ally_team
+        for f in fighters:
+            while not f.is_alive():
+                pass
+        """for enemy in self.enemy_team:
             while enemy.is_alive() == False:
                 pass
 
         for ally in self.ally_team:
             while ally.is_alive() == False:
-                pass
+                pass"""
         
         while not self.is_dead and len(self.enemy_team) != 0:
             time.sleep(int((1000 / (self.initiative)))/1000)
