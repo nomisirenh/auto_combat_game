@@ -34,16 +34,17 @@ class FighterInterface (ABC, threading.Thread):
         Attack an enemy
         """
         
-        if enemy.is_alive() and not self.is_dead:
+        if enemy.is_alive() and not self.is_dead and len(self.enemy_team) != 0:
             pod = enemy.parry_or_dodge()
-            if pod != False:
+            if pod != False and not enemy.is_dead:
                 print(f"{self} ATTACK {enemy} {colors.fgYellow}{pod} !{colors.reset}")
             else:
                 
-                if self.critical_attack() and not enemy.is_dead:
+                if self.critical_attack() and not enemy.is_dead and len(self.enemy_team) != 0:
                     dam = enemy.take_damage(self, 1)
                     print(f"{self} ATTACK {enemy} {colors.fgRed}({dam} dam){colors.reset} {colors.fgYellow}CRITICAL !{colors.reset}")
-                elif not enemy.is_dead:
+
+                elif not enemy.is_dead and len(self.enemy_team) != 0 and not self.is_dead:
                     dam = enemy.take_damage(self, 0)
                     print(f"{self} ATTACK {enemy} {colors.fgRed}({dam} dam){colors.reset}")
 
@@ -89,22 +90,22 @@ class FighterInterface (ABC, threading.Thread):
         """
         Set heal point depending on attacker attack value and if it's a critical attack
         """
-        with self.lock:
-            heal_p = self.health_point
-            if critical:
-                true_damage = fighter.attack_value
-            else:
-                true_damage = fighter.attack_value - self.defense_value
+        #with self.lock:
+        heal_p = self.health_point
+        if critical:
+            true_damage = fighter.attack_value
+        else:
+            true_damage = fighter.attack_value - self.defense_value
 
-            if true_damage < 0:
-                true_damage = 0
+        if true_damage < 0:
+            true_damage = 0
 
-            heal_p = self.health_point - true_damage
-            if heal_p <= 0:
-                self.health_point = 0
-                self.is_dead = True
-            else:
-                self.health_point = heal_p
+        heal_p = self.health_point - true_damage
+        if heal_p <= 0:
+            self.health_point = 0
+            self.is_dead = True
+        else:
+            self.health_point = heal_p
 
             return true_damage
 
@@ -112,8 +113,8 @@ class FighterInterface (ABC, threading.Thread):
         """
         Hp to max, use for priest to heal
         """
-        with self.lock:
-            self.health_point = self.max_hp
+        #with self.lock:
+        self.health_point = self.max_hp
 
     def set_enemy_team(self, enemies):
         self.enemy_team = enemies
@@ -144,9 +145,9 @@ class FighterInterface (ABC, threading.Thread):
             else:
                 enemy = choice(self.enemy_team)
 
-            if enemy.is_alive():
-                #with enemy.lock:
-                self.attack(enemy)
+            if enemy.is_alive() and not self.is_dead:
+                with enemy.lock:
+                    self.attack(enemy)
     
     def __str__(self) -> str:
         #return f'{self.id},{self._class}, {self.name}, {self.lastname}, attaque = {self.attack_value}, defense = {self.defense_value}, health = {self.health_point}, critical = {self.critical}, initiative = {self.initiative}, parry = {self.parry}, dodge = {self.dodge}'

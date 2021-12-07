@@ -58,14 +58,14 @@ class Priest(FighterInterface):
     def heal(self, fighter:FighterInterface):
         if fighter == self:
             hp = self.health_point + (self.defense_value//4)
-            if hp > self.max_hp and not self.is_dead:
+            if hp > self.max_hp and not self.is_dead and len(self.enemy_team) != 0:
                 self.set_hp_max()
-            elif not self.is_dead:
+            elif not self.is_dead and len(self.enemy_team) != 0:
                 with self.lock:
                     self.health_point = hp
             print(f'{self} {colors.fgMagenta}HEAL HIMSELF{colors.reset}')
         else:
-            if not self.is_dead:
+            if not self.is_dead and len(self.enemy_team) != 0 and not fighter.is_dead:
                 fighter.set_hp_max()
                 print(f'{self} {colors.fgMagenta}HEAL{colors.reset} {fighter}')
 
@@ -91,9 +91,9 @@ class Priest(FighterInterface):
                 else:
                     enemy = choice(self.enemy_team)
 
-                if enemy.is_alive():
-                    #with enemy.lock:
-                    self.attack(enemy)
+                if enemy.is_alive() and not self.is_dead:
+                    with enemy.lock:
+                        self.attack(enemy)
             else:
                 if not len(self.ally_team):
                     break
@@ -102,9 +102,9 @@ class Priest(FighterInterface):
                     while ally.health_point == ally.max_hp and self.is_alive() and len(self.enemy_team) != 0:
                         ally = choice(self.ally_team)
 
-                    if ally.is_alive():
-                        #with enemy.lock:
-                        self.heal(ally)        
+                    if ally.is_alive() and not self.is_dead:
+                        with ally.lock:
+                            self.heal(ally)        
 
 if __name__ == '__main__':
     pass

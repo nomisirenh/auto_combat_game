@@ -114,8 +114,7 @@ class Game():
             team.team_str()
             
 
-        print("")
-        
+        print("")        
 
         for fighter in self.fighters:
             fighter.start()
