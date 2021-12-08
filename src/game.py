@@ -3,6 +3,7 @@ from src.Fighter_class.Class import Warrior, Rogue, Wizard, Priest
 from src.Fighter_class.Team import Team
 from src.db.insert_db import insert_fighter
 from src.db.get_db import get_random_fighter, get_random_team
+from src.db.update_db import set_hp_fighter
 from src.misc.NameGenerator import name_generator
 from random import randrange
 
@@ -90,8 +91,11 @@ class Game():
             team = Team(id = data[0], name = data[1],fighters = mid)
             if team.name == "Blue":
                 team.color = "\033[34m"
+                self.team_blue_bk = team.fighters.copy()
             else:
                 team.color = "\033[32m"
+                self.team_red_bk = team.fighters.copy()
+
             mid = self.fighters[:10]
             teams.append(team)
         
@@ -107,6 +111,27 @@ class Game():
                 fighter.set_color(teams[1].color)
         
         return teams
+
+    def update_fighter_in_db(self):
+        f: FighterInterface
+        for team in self.teams:
+            if team.name == "Blue":
+                for f in self.team_blue_bk:
+                    if f in team.fighters:
+                        set_hp_fighter((f.health_point, f.id))
+                        #print("Vivant")
+                    else:
+                        set_hp_fighter((0, f.id))
+                        #print("Dead")
+            else:
+                for f in self.team_red_bk:
+                    if f in team.fighters:
+                        set_hp_fighter((f.health_point, f.id))
+                        #print("Vivant")
+                    else:
+                        set_hp_fighter((0, f.id))
+                        #print("Dead")
+
 
     def do_fight(self):
         print("=================BATTLE START=================")
@@ -128,6 +153,9 @@ class Game():
             team.team_str()
             print(f"=> Combattant(s) en vie: {team.fighters_alive()}/10")
 
+        #self.update_fighter_in_db()
+
 if __name__ == '__main__':
     game = Game()
     game.do_fight()
+    

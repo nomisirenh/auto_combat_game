@@ -56,18 +56,22 @@ class Priest(FighterInterface):
         assert dodge == None
 
     def heal(self, fighter:FighterInterface):
+        #if fighter == self:
+        hp = self.health_point + (self.defense_value//4)
+        if hp > self.max_hp and not self.is_dead and len(self.enemy_team) != 0:
+            fighter.set_hp_max()
+        elif not self.is_dead and len(self.enemy_team) != 0:
+            #with self.lock:
+            fighter.health_point = hp
+        
         if fighter == self:
-            hp = self.health_point + (self.defense_value//4)
-            if hp > self.max_hp and not self.is_dead and len(self.enemy_team) != 0:
-                self.set_hp_max()
-            elif not self.is_dead and len(self.enemy_team) != 0:
-                #with self.lock:
-                self.health_point = hp
             print(f'{self} {colors.fgMagenta}HEAL HIMSELF{colors.reset}')
         else:
-            if not self.is_dead and len(self.enemy_team) != 0 and not fighter.is_dead:
-                fighter.set_hp_max()
-                print(f'{self} {colors.fgMagenta}HEAL{colors.reset} {fighter}')
+            print(f'{self} {colors.fgMagenta}HEAL{colors.reset} {fighter}')
+        #else:
+            #if not self.is_dead and len(self.enemy_team) != 0 and not fighter.is_dead:
+            #    fighter.set_hp_max()
+            #    print(f'{self} {colors.fgMagenta}HEAL{colors.reset} {fighter}')
 
     def run(self) -> None:
         fighters = self.enemy_team + self.ally_team

@@ -2,6 +2,7 @@ from src.db.db_connection import create_connection
 
 def get_random_fighter():
     sql_querry = """ SELECT * FROM Fighter
+                    WHERE health_point > 0
                     ORDER BY random() LIMIT 20
                 """
     
