@@ -7,6 +7,8 @@ class Team():
         self.fighters = fighters
         self.color = None
 
+        self.win = None
+
     def get_fighters(self):
         """
         Return a list of all fighters in the team

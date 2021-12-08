@@ -38,8 +38,8 @@ def main():
 
     sql_table_battle = """CREATE TABLE IF NOT EXISTS Battle (
                             battle_id integer PRIMARY KEY AUTOINCREMENT,
-                            winner_team text
-                            loser_team text
+                            winner_team text,
+                            loser_team text,
                             still_living int
                         );"""
 

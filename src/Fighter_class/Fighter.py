@@ -130,13 +130,6 @@ class FighterInterface (ABC, threading.Thread):
         for f in fighters:
             while not f.is_alive():
                 pass
-        """for enemy in self.enemy_team:
-            while enemy.is_alive() == False:
-                pass
-
-        for ally in self.ally_team:
-            while ally.is_alive() == False:
-                pass"""
         
         while not self.is_dead and len(self.enemy_team) != 0:
             time.sleep(int((1000 / (self.initiative)))/1000)

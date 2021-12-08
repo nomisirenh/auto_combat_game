@@ -1,7 +1,7 @@
 from src.Fighter_class.Fighter import FighterInterface
 from src.Fighter_class.Class import Warrior, Rogue, Wizard, Priest
 from src.Fighter_class.Team import Team
-from src.db.insert_db import insert_fighter
+from src.db.insert_db import insert_fighter, insert_battle, insert_fighter_team
 from src.db.get_db import get_random_fighter, get_random_team
 from src.db.update_db import set_hp_fighter
 from src.misc.NameGenerator import name_generator
@@ -112,33 +112,38 @@ class Game():
         
         return teams
 
-    def update_fighter_in_db(self):
+    def update_fighter_in_db(self, battle_id):
         f: FighterInterface
         for team in self.teams:
             if team.name == "Blue":
+
                 for f in self.team_blue_bk:
                     if f in team.fighters:
                         set_hp_fighter((f.health_point, f.id))
-                        #print("Vivant")
                     else:
                         set_hp_fighter((0, f.id))
-                        #print("Dead")
+
+                    insert_fighter_team((f.id, team.id, battle_id))
             else:
                 for f in self.team_red_bk:
                     if f in team.fighters:
                         set_hp_fighter((f.health_point, f.id))
-                        #print("Vivant")
                     else:
                         set_hp_fighter((0, f.id))
-                        #print("Dead")
 
+                    insert_fighter_team((f.id, team.id, battle_id))
+
+    def save_battle_in_db(self):
+        if self.teams[0].win:
+            id = insert_battle((self.teams[0].name, self.teams[1].name, self.teams[0].fighters_alive()))
+        else:
+            id = insert_battle((self.teams[1].name, self.teams[0].name, self.teams[1].fighters_alive()))
+        return id
 
     def do_fight(self):
         print("=================BATTLE START=================")
         for team in self.teams:
             team.team_str()
-            
-
         print("")        
 
         for fighter in self.fighters:
@@ -148,12 +153,17 @@ class Game():
             fighter.join()
 
         print("")
-        print("=================BATTLE END=================")
+        print("=================BATTLE END==================")
         for team in self.teams:
             team.team_str()
             print(f"=> Combattant(s) en vie: {team.fighters_alive()}/10")
+            if team.fighters_alive():
+                team.win = True
+            else:
+                team.win = False
 
-        #self.update_fighter_in_db()
+        battle_id = self.save_battle_in_db()
+        self.update_fighter_in_db(battle_id)
 
 if __name__ == '__main__':
     game = Game()
