@@ -107,7 +107,7 @@ class FighterInterface (ABC, threading.Thread):
         else:
             self.health_point = heal_p
 
-            return true_damage
+        return true_damage
 
     def set_hp_max(self):
         """
