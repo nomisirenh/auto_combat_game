@@ -11,7 +11,7 @@ class Game():
     teams : list[Team]
     fighters : list[FighterInterface]
     def __init__(self) -> None:
-        #self.generate_new_fighter()
+        self.generate_new_fighter()
         self.fighters = self.get_figthers_from_db()
         self.teams = self.assign_team()
 

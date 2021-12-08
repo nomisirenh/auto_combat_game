@@ -26,6 +26,3 @@ def get_random_team():
 
         datas = c.fetchall()
         return datas
-
-if __name__ == '__main__':
-    pass

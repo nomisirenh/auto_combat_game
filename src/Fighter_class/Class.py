@@ -10,7 +10,7 @@ class Warrior(FighterInterface):
 
         assert attack_value <= 90 and attack_value >= 70
         assert defense_value <= 90 and defense_value >= 70
-        assert health_point <= 150 and health_point >= 120
+        assert health_point <= 150
         assert critical <= 8 and critical >= 5
         assert initiative <= 60 and initiative >= 40
         assert parry <= 60 and parry >= 40
@@ -23,7 +23,7 @@ class Rogue(FighterInterface):
 
         assert attack_value <= 60 and attack_value >= 40
         assert defense_value <= 50 and defense_value >= 30
-        assert health_point <= 80 and health_point >= 70
+        assert health_point <= 80
         assert critical <= 20 and critical >= 15
         assert initiative <= 90 and initiative >= 75
         assert parry == None
@@ -36,7 +36,7 @@ class Wizard(FighterInterface):
 
         assert attack_value <= 150 and attack_value >= 100
         assert defense_value <= 40 and defense_value >= 20
-        assert health_point <= 70 and health_point >= 60
+        assert health_point <= 70
         assert critical <= 7 and critical >= 5
         assert initiative <= 91 and initiative >= 75
         assert parry == None
@@ -49,7 +49,7 @@ class Priest(FighterInterface):
 
         assert attack_value <= 60 and attack_value >= 30
         assert defense_value <= 81 and defense_value >= 60
-        assert health_point <= 90 and health_point >= 70
+        assert health_point <= 90
         assert critical <= 7 and critical >= 5
         assert initiative <= 60 and initiative >= 50
         assert parry <= 50 and parry >= 30
@@ -103,5 +103,3 @@ class Priest(FighterInterface):
                         with ally.lock:
                             self.heal(ally)        
 
-if __name__ == '__main__':
-    pass

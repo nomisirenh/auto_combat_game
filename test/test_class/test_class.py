@@ -4,7 +4,6 @@ import src.Fighter_class.Fighter
 from src.Fighter_class.Fighter import FighterInterface
 from src.Fighter_class.Class import *
 from src.Fighter_class.Team import Team
-import time
 from random import randrange
 
 from src.game import Game
@@ -253,7 +252,7 @@ class ClassTesting(unittest.TestCase):
         #test heal
         priest = Priest("foo", "bar", self.pri_attack, self.pri_defense_value, self.pri_health_point,self.pri_critical,self.pri_initiative,self.pri_parry)
         wizard = Wizard("toto", "tata", self.wiz_attack, self.wiz_defense_value,self.wiz_health_point,self.wiz_critical,self.wiz_initiative)
-
+        priest.enemy_team = [wizard]
         #When priest heal himself
         priest.health_point = 20
         comp = 20 + priest.defense_value//4
