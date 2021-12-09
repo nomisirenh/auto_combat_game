@@ -133,6 +133,7 @@ class FighterInterface (ABC, threading.Thread):
         
         while not self.is_dead and len(self.enemy_team) != 0:
             time.sleep(int((1000 / (self.initiative)))/1000)
+
             self.focus_random()
 
     def focus_random(self):
@@ -142,8 +143,31 @@ class FighterInterface (ABC, threading.Thread):
             if enemy.is_alive() and not self.is_dead:
                 with enemy.lock:
                     self.attack(enemy)
-        
-    
+
+    def focus_specific_class(self, focus_class):
+        if self.is_class_in(focus_class, "enemy") and len(self.enemy_team):
+            enemy = choice(self.enemy_team)
+            while enemy._class != focus_class and len(self.enemy_team) and self.is_class_in(focus_class, "enemy"):
+                enemy = choice(self.enemy_team)
+
+            if enemy.is_alive() and not self.is_dead:
+                with enemy.lock:
+                    self.attack(enemy)
+        else:
+            self.focus_random()
+
+    def is_class_in(self, f_class, ally_or_enemy):
+        if ally_or_enemy == "enemy":
+            for enemy in self.enemy_team:
+                if enemy._class == f_class:
+                    return True
+            return False
+        else:
+            for ally in self.ally_team:
+                if ally._class == f_class:
+                    return True
+            return False
+
     def __str__(self) -> str:
         #return f'{self.id},{self._class}, {self.name}, {self.lastname}, attaque = {self.attack_value}, defense = {self.defense_value}, health = {self.health_point}, critical = {self.critical}, initiative = {self.initiative}, parry = {self.parry}, dodge = {self.dodge}'
         if self.team_color:

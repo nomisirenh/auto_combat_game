@@ -315,6 +315,23 @@ class ClassTesting(unittest.TestCase):
 
         self.assertEqual(rogue.team_color, "\033[32m")
 
+    def test_is_class_in(self):
+        rogue = Rogue("toto", "tata", self.rog_attack, self.rog_defense_value,self.rog_health_point,self.rog_critical,self.rog_initiative,None,self.rog_dodge)
+        warrior = Warrior("toto", "tata", self.war_attack, self.war_defense_value,self.war_health_point,self.war_critical,self.war_initiative,self.war_parry)
+        priest = Priest("foo", "bar", self.pri_attack, self.pri_defense_value, self.pri_health_point,self.pri_critical,self.pri_initiative,self.pri_parry)
+        wizard = Wizard("toto", "tata", self.wiz_attack, self.wiz_defense_value,self.wiz_health_point,self.wiz_critical,self.wiz_initiative)
+
+        en = [warrior, priest, wizard]
+
+        rogue.set_enemy_team(en)
+
+        self.assertTrue(rogue.is_class_in("warrior", "enemy"))
+        self.assertFalse(rogue.is_class_in("Rogue", "enemy"))
+
+        warrior.set_ally_team(en)
+
+        self.assertTrue(warrior.is_class_in("warrior", "ally"))
+        self.assertFalse(warrior.is_class_in("Rogue", "ally"))
 
 
 

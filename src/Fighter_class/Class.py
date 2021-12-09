@@ -64,9 +64,9 @@ class Priest(FighterInterface):
             #with self.lock:
             fighter.health_point = hp
         
-        if fighter == self:
+        if fighter == self and not self.is_dead:
             print(f'{self} {colors.fgMagenta}HEAL HIMSELF{colors.reset}')
-        else:
+        elif not self.is_dead:
             print(f'{self} {colors.fgMagenta}HEAL{colors.reset} {fighter}')
         #else:
             #if not self.is_dead and len(self.enemy_team) != 0 and not fighter.is_dead:
@@ -85,15 +85,27 @@ class Priest(FighterInterface):
             if i == 0:
                 self.focus_random()
             else:
-                self.focus_heal_random()
+                self.focus_heal_specific_class("warrior")
 
     def focus_heal_random(self):
-        if len(self.ally_team):
+        if len(self.enemy_team):
             ally = choice(self.ally_team)
             while ally.health_point == ally.max_hp and len(self.enemy_team) != 0:
+                ally = choice(self.ally_team)
+
+            if ally.is_alive() and not self.is_dead and len(self.enemy_team) != 0:
+                with ally.lock:
+                    self.heal(ally)
+
+    def focus_heal_specific_class(self, focus_class):
+        if self.is_class_in(focus_class, "ally") and len(self.enemy_team):
+            ally = choice(self.ally_team)
+            while ally._class != focus_class and ally.health_point == ally.max_hp and self.is_class_in(focus_class, "ally"):
                 ally = choice(self.ally_team)
 
             if ally.is_alive() and not self.is_dead:
                 with ally.lock:
                     self.heal(ally)
+        else:
+            self.focus_heal_random()
 
