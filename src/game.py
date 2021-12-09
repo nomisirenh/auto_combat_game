@@ -19,7 +19,7 @@ class Game():
         """
         Generate 20 random fighters and insert them into the database
         """
-        print("Génération de 20 nouveau combattants...")
+        print("Generation of 20 new fighters...")
         for i in range(20):
             name = name_generator()
             lastname = name_generator()
@@ -140,11 +140,13 @@ class Game():
             id = insert_battle((self.teams[1].name, self.teams[0].name, self.teams[1].fighters_alive()))
         return id
 
-    def do_fight(self):
-        print("=================BATTLE START=================")
+    def teams_description(self):
         for team in self.teams:
             team.team_str()
-        print("")        
+        print("")  
+
+    def do_fight(self):
+        print("=================BATTLE START=================")      
 
         for fighter in self.fighters:
             fighter.start()

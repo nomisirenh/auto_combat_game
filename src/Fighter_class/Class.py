@@ -83,9 +83,12 @@ class Priest(FighterInterface):
             time.sleep(int((1000 / (self.initiative)))/1000)
             i = randrange(0,2)
             if i == 0:
-                self.focus_random()
+                if self.tactic == None:
+                    self.focus_random()
+                else:
+                    self.focus_specific_class(self.tactic)
             else:
-                self.focus_heal_specific_class("warrior")
+                self.focus_heal_random()
 
     def focus_heal_random(self):
         if len(self.enemy_team):

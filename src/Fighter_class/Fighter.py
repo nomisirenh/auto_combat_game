@@ -125,6 +125,9 @@ class FighterInterface (ABC, threading.Thread):
     def set_color(self, color):
         self.team_color = color
 
+    def set_tactic(self, tactic):
+        self.tactic = tactic
+
     def run(self) -> None:
         fighters = self.enemy_team + self.ally_team
         for f in fighters:
@@ -134,7 +137,10 @@ class FighterInterface (ABC, threading.Thread):
         while not self.is_dead and len(self.enemy_team) != 0:
             time.sleep(int((1000 / (self.initiative)))/1000)
 
-            self.focus_random()
+            if self.tactic == None:
+                self.focus_random()
+            else:
+                self.focus_specific_class(self.tactic)
 
     def focus_random(self):
         if len(self.enemy_team):

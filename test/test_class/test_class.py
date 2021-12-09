@@ -333,7 +333,27 @@ class ClassTesting(unittest.TestCase):
         self.assertTrue(warrior.is_class_in("warrior", "ally"))
         self.assertFalse(warrior.is_class_in("Rogue", "ally"))
 
+    def test_algo_random(self):
+        rogue = Rogue("toto", "tata", self.rog_attack, self.rog_defense_value,self.rog_health_point,self.rog_critical,self.rog_initiative,None,self.rog_dodge)
+        warrior = Warrior("toto", "tata", self.war_attack, self.war_defense_value,self.war_health_point,self.war_critical,self.war_initiative,self.war_parry)
 
+        en = [warrior]
+        rogue.set_enemy_team(en)
 
+        rogue.focus_random()
 
+        """priest = Priest("foo", "bar", self.pri_attack, self.pri_defense_value, self.pri_health_point,self.pri_critical,self.pri_initiative,self.pri_parry)
+        al = [rogue]
 
+        priest.set_ally_team(al)
+        priest.set_enemy_team(en)
+        priest.focus_heal_random()"""
+
+    def test_algo_focus(self):
+        rogue = Rogue("toto", "tata", self.rog_attack, self.rog_defense_value,self.rog_health_point,self.rog_critical,self.rog_initiative,None,self.rog_dodge)
+        warrior = Warrior("toto", "tata", self.war_attack, self.war_defense_value,self.war_health_point,self.war_critical,self.war_initiative,self.war_parry)
+
+        en = [warrior]
+        rogue.set_enemy_team(en)
+
+        rogue.focus_specific_class("warrior")

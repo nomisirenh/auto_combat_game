@@ -8,6 +8,7 @@ class Team():
         self.color = None
 
         self.win = None
+        self.tactic = None
 
     def get_fighters(self):
         """
@@ -24,6 +25,10 @@ class Team():
         for fighter in self.fighters:
             print("  --> ", end="")
             print(f"{fighter}")
+    
+    def set_team_tactic(self, tactic):
+        for fighter in self.fighters:
+            fighter.set_tactic(tactic)
 
     def fighters_alive(self):
         i = 0
