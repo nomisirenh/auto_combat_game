@@ -58,9 +58,9 @@ class Priest(FighterInterface):
     def heal(self, fighter:FighterInterface):
         #if fighter == self:
         hp = self.health_point + (self.defense_value//4)
-        if hp > self.max_hp and not self.is_dead and len(self.enemy_team) != 0:
+        if hp > self.max_hp and not self.is_dead and len(self.enemy_team) != 0 and fighter.health_point != fighter.max_hp:
             fighter.set_hp_max()
-        elif not self.is_dead and len(self.enemy_team) != 0:
+        elif not self.is_dead and len(self.enemy_team) != 0 and fighter.health_point != fighter.max_hp:
             #with self.lock:
             fighter.health_point = hp
         
@@ -83,23 +83,17 @@ class Priest(FighterInterface):
             time.sleep(int((1000 / (self.initiative)))/1000)
             i = randrange(0,2)
             if i == 0:
-                if not len(self.enemy_team):
-                    break
-                else:
-                    enemy = choice(self.enemy_team)
-
-                if enemy.is_alive() and not self.is_dead:
-                    with enemy.lock:
-                        self.attack(enemy)
+                self.focus_random()
             else:
-                if not len(self.ally_team):
-                    break
-                else:
-                    ally = choice(self.ally_team)
-                    while ally.health_point == ally.max_hp and len(self.enemy_team) != 0:
-                        ally = choice(self.ally_team)
+                self.focus_heal_random()
 
-                    if ally.is_alive() and not self.is_dead:
-                        with ally.lock:
-                            self.heal(ally)        
+    def focus_heal_random(self):
+        if len(self.ally_team):
+            ally = choice(self.ally_team)
+            while ally.health_point == ally.max_hp and len(self.enemy_team) != 0:
+                ally = choice(self.ally_team)
+
+            if ally.is_alive() and not self.is_dead:
+                with ally.lock:
+                    self.heal(ally)
 

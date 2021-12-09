@@ -133,14 +133,16 @@ class FighterInterface (ABC, threading.Thread):
         
         while not self.is_dead and len(self.enemy_team) != 0:
             time.sleep(int((1000 / (self.initiative)))/1000)
-            if not len(self.enemy_team):
-                break
-            else:
-                enemy = choice(self.enemy_team)
+            self.focus_random()
+
+    def focus_random(self):
+        if len(self.enemy_team):
+            enemy = choice(self.enemy_team)
 
             if enemy.is_alive() and not self.is_dead:
                 with enemy.lock:
                     self.attack(enemy)
+        
     
     def __str__(self) -> str:
         #return f'{self.id},{self._class}, {self.name}, {self.lastname}, attaque = {self.attack_value}, defense = {self.defense_value}, health = {self.health_point}, critical = {self.critical}, initiative = {self.initiative}, parry = {self.parry}, dodge = {self.dodge}'

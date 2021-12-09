@@ -11,7 +11,7 @@ class Game():
     teams : list[Team]
     fighters : list[FighterInterface]
     def __init__(self) -> None:
-        self.generate_new_fighter()
+        #self.generate_new_fighter()
         self.fighters = self.get_figthers_from_db()
         self.teams = self.assign_team()
 
@@ -162,8 +162,8 @@ class Game():
             else:
                 team.win = False
 
-        battle_id = self.save_battle_in_db()
-        self.update_fighter_in_db(battle_id)
+        #battle_id = self.save_battle_in_db()
+        #self.update_fighter_in_db(battle_id)
 
 if __name__ == '__main__':
     game = Game()
