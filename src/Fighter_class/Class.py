@@ -100,12 +100,12 @@ class Priest(FighterInterface):
     def focus_heal_specific_class(self, focus_class):
         if self.is_class_in(focus_class, "ally") and len(self.enemy_team):
             ally = choice(self.ally_team)
-            while ally._class != focus_class and ally.health_point == ally.max_hp and self.is_class_in(focus_class, "ally"):
+            while ally._class != focus_class and len(self.enemy_team) and self.is_class_in(focus_class, "ally"):
                 ally = choice(self.ally_team)
 
             if ally.is_alive() and not self.is_dead:
                 with ally.lock:
                     self.heal(ally)
         else:
-            self.focus_heal_random()
+            self.focus_random()
 
