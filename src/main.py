@@ -31,7 +31,7 @@ class Main():
         print("")
 
         for team in game.teams:
-            print(f"Select fighting tactic for team {team.color}{team.name}{colors.reset}: ")
+            print(f"Select FIGHTING tactic for team {team.color}{team.name}{colors.reset}: ")
             print("    [1] Focus Warriors    ")
             print("    [2] Focus Rogues")
             print("    [3] Focus Priests")
@@ -42,17 +42,44 @@ class Main():
             while c not in ["1","2","3","4", "5"]:
                 print(f"{colors.fgRed}WRONG CHOICE{colors.reset}")
                 c = input(f"{colors.fgBrightYellow}ENTER CHOICE: {colors.reset}")
+            print("")
+
+            print(f"Select HEALING tactic for team {team.color}{team.name}{colors.reset}: ")
+            print("    [1] Heal Warriors    ")
+            print("    [2] Heal Rogues")
+            print("    [3] Heal Priests")
+            print("    [4] Heal Wizards")
+            print("    [5] Random")
+
+            d = input(f"{colors.fgBrightYellow}ENTER CHOICE: {colors.reset}")
+            while c not in ["1","2","3","4", "5"]:
+                print(f"{colors.fgRed}WRONG CHOICE{colors.reset}")
+                d = input(f"{colors.fgBrightYellow}ENTER CHOICE: {colors.reset}")
+            print("")
 
             if int(c) == 1:
-                team.set_team_tactic("warrior")
+                tactic = "warrior"
             elif int(c) == 2:
-                team.set_team_tactic("Rogue")
+                tactic = "Rogue"
             elif int(c) == 3:
-                team.set_team_tactic("Priest")
+                tactic = "Priest"
             elif int(c) == 4:
-                team.set_team_tactic("Wizard")
+                tactic = "Wizard"
             elif int(c) == 5:
-                team.set_team_tactic(None)
+                tactic = None
+
+            if int(d) == 1:
+                heal_tactic = "warrior"
+            elif int(d) == 2:
+                heal_tactic = "Rogue"
+            elif int(d) == 3:
+                heal_tactic = "Priest"
+            elif int(d) == 4:
+                heal_tactic = "Wizard"
+            elif int(d) == 5:
+                heal_tactic = None
+            
+            team.set_team_tactic(tactic, heal_tactic)
 
         game.do_fight()
 

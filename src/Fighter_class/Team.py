@@ -26,9 +26,12 @@ class Team():
             print("  --> ", end="")
             print(f"{fighter}")
     
-    def set_team_tactic(self, tactic):
+    def set_team_tactic(self, tactic, heal_tactic):
         for fighter in self.fighters:
             fighter.set_tactic(tactic)
+
+            if fighter._class == "Priest":
+                fighter.set_heal_tactic(heal_tactic)
 
     def fighters_alive(self):
         i = 0

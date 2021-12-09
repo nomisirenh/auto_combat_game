@@ -56,22 +56,21 @@ class Priest(FighterInterface):
         assert dodge == None
 
     def heal(self, fighter:FighterInterface):
-        #if fighter == self:
+
         hp = self.health_point + (self.defense_value//4)
         if hp > self.max_hp and not self.is_dead and len(self.enemy_team) != 0 and fighter.health_point != fighter.max_hp:
             fighter.set_hp_max()
+
         elif not self.is_dead and len(self.enemy_team) != 0 and fighter.health_point != fighter.max_hp:
-            #with self.lock:
             fighter.health_point = hp
         
         if fighter == self and not self.is_dead:
             print(f'{self} {colors.fgMagenta}HEAL HIMSELF{colors.reset}')
         elif not self.is_dead:
             print(f'{self} {colors.fgMagenta}HEAL{colors.reset} {fighter}')
-        #else:
-            #if not self.is_dead and len(self.enemy_team) != 0 and not fighter.is_dead:
-            #    fighter.set_hp_max()
-            #    print(f'{self} {colors.fgMagenta}HEAL{colors.reset} {fighter}')
+    
+    def set_heal_tactic(self, heal_tactic):
+        self.heal_tactic = heal_tactic
 
     def run(self) -> None:
         fighters = self.enemy_team + self.ally_team
@@ -88,7 +87,10 @@ class Priest(FighterInterface):
                 else:
                     self.focus_specific_class(self.tactic)
             else:
-                self.focus_heal_random()
+                if self.heal_tactic == None:
+                    self.focus_heal_random()
+                else:
+                    self.focus_heal_specific_class(self.heal_tactic)
 
     def focus_heal_random(self):
         if len(self.enemy_team):
