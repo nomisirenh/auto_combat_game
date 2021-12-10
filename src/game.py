@@ -2,9 +2,10 @@ from src.Fighter_class.Fighter import FighterInterface
 from src.Fighter_class.Class import Warrior, Rogue, Wizard, Priest
 from src.Fighter_class.Team import Team
 from src.db.insert_db import insert_fighter, insert_battle, insert_fighter_team
-from src.db.get_db import get_random_fighter, get_random_team
+from src.db.get_db import get_random_fighter, get_random_team, get_max_battle_id
 from src.db.update_db import set_hp_fighter
 from src.misc.NameGenerator import name_generator
+from src.misc.color import colors
 from random import randrange
 
 class Game():
@@ -146,7 +147,9 @@ class Game():
         print("")  
 
     def do_fight(self):
-        print("=================BATTLE START=================")      
+        battle_id = get_max_battle_id()
+        battle_id +=1
+        print(f"{colors.fgBrightMagenta}════════════════════════BATTLE {battle_id} START════════════════════════")      
 
         for fighter in self.fighters:
             fighter.start()
@@ -155,7 +158,7 @@ class Game():
             fighter.join()
 
         print("")
-        print("=================BATTLE END==================")
+        print(f"{colors.fgBrightMagenta}════════════════════════BATTLE {battle_id} END════════════════════════{colors.reset}")
         for team in self.teams:
             team.team_str()
             print(f"=> Combattant(s) en vie: {team.fighters_alive()}/10")
