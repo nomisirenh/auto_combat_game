@@ -48,6 +48,9 @@ def main():
                             fighter_id int NOT NULL,
                             team_id int NOT NULL,
                             battle_id int NOT NULL,
+                            remaining_hp,
+                            fighting_tactic,
+                            healing_tactic,
                             FOREIGN KEY (fighter_id) REFERENCES Fighter (fighter_id),
                             FOREIGN KEY (team_id) REFERENCES Team (team_id),
                             FOREIGN KEY (battle_id) REFERENCES Battle (battle_id)

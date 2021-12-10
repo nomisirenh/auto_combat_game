@@ -138,6 +138,15 @@ class ClassTesting(unittest.TestCase):
         team  = Team(1, "red", fighter_list)
 
         self.assertEqual(team.get_fighters(), fighter_list)
+
+        team.set_team_tactic(None, None)
+        self.assertEqual(team.fighting_tactic, "Random")
+        self.assertEqual(team.heal_tactic, "Random")
+        
+        team.set_team_tactic("test", "test2")
+        self.assertEqual(team.fighting_tactic, "test")
+        self.assertEqual(team.heal_tactic, "test2")
+
         
 
     def test_attack(self):

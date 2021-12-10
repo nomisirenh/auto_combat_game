@@ -1,5 +1,6 @@
 from os import execlp
 from src.game import Game
+from src.history import History
 from src.misc.color import colors
 
 class Main():
@@ -7,11 +8,11 @@ class Main():
         pass
 
     def main_menu(self):
-        print(f"{colors.fgBrightMagenta}══════COMBAT GAME══════{colors.reset}")
+        print(f"{colors.fgBrightMagenta}═════════COMBAT GAME═════════{colors.reset}")
         print(f"{colors.fgBrightBlue}   [1] PLAY GAME       {colors.reset}")
         print(f"{colors.fgBrightBlue}   [2] GAMES HISTORY    {colors.reset}")
         print(f"{colors.fgBrightBlue}   [3] QUIT            {colors.reset}")
-        print(f"{colors.fgBrightMagenta}═══════════════════════{colors.reset}")
+        print(f"{colors.fgBrightMagenta}═════════════════════════════{colors.reset}")
 
         try:
             c = int(input(f"{colors.fgBrightYellow}ENTER CHOICE: {colors.reset}"))
@@ -19,6 +20,10 @@ class Main():
 
             if c == 1:
                 self.game_menu()
+            if c == 2:
+                h = History()
+                print("")
+                h.menu()
 
         except (AssertionError, ValueError):
             print(f"{colors.fgRed}WRONG CHOICE{colors.reset}")

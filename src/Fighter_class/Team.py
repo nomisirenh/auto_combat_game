@@ -8,7 +8,8 @@ class Team():
         self.color = None
 
         self.win = None
-        self.tactic = None
+        self.fighting_tactic = None
+        self.heal_tactic = None
 
     def get_fighters(self):
         """
@@ -27,6 +28,16 @@ class Team():
             print(f"{fighter}")
     
     def set_team_tactic(self, tactic, heal_tactic):
+        if tactic == None:
+            self.fighting_tactic = "Random"
+        else:
+            self.fighting_tactic = tactic
+
+        if heal_tactic == None:
+            self.heal_tactic = "Random"
+        else: 
+            self.heal_tactic = heal_tactic
+            
         for fighter in self.fighters:
             fighter.set_tactic(tactic)
 

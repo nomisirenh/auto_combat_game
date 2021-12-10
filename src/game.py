@@ -11,7 +11,7 @@ class Game():
     teams : list[Team]
     fighters : list[FighterInterface]
     def __init__(self) -> None:
-        #self.generate_new_fighter()
+        self.generate_new_fighter()
         self.fighters = self.get_figthers_from_db()
         self.teams = self.assign_team()
 
@@ -122,8 +122,8 @@ class Game():
                         set_hp_fighter((f.health_point, f.id))
                     else:
                         set_hp_fighter((0, f.id))
-
-                    insert_fighter_team((f.id, team.id, battle_id))
+                    
+                    insert_fighter_team((f.id, team.id, battle_id, f.health_point ,team.fighting_tactic, team.heal_tactic))
             else:
                 for f in self.team_red_bk:
                     if f in team.fighters:
@@ -131,7 +131,7 @@ class Game():
                     else:
                         set_hp_fighter((0, f.id))
 
-                    insert_fighter_team((f.id, team.id, battle_id))
+                    insert_fighter_team((f.id, team.id, battle_id, f.health_point,team.fighting_tactic, team.heal_tactic))
 
     def save_battle_in_db(self):
         if self.teams[0].win:
@@ -164,10 +164,7 @@ class Game():
             else:
                 team.win = False
 
-        #battle_id = self.save_battle_in_db()
-        #self.update_fighter_in_db(battle_id)
+        battle_id = self.save_battle_in_db()
+        self.update_fighter_in_db(battle_id)
 
-if __name__ == '__main__':
-    game = Game()
-    game.do_fight()
     

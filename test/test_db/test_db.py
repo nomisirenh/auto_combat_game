@@ -35,3 +35,13 @@ class Db_testing(unittest.TestCase):
         for data in datas:
             datas.pop(datas.index(data))
             self.assertNotIn(data, datas)
+
+    def test_get_history(self):
+        datas = get_history(1)
+
+        self.assertEqual(len(datas), 20)
+
+    def test_get_max_battle(self):
+        max = get_max_battle_id()
+
+        self.assertIsInstance(max, int)
