@@ -1,4 +1,3 @@
-from os import execlp
 from src.game import Game
 from src.history import History
 from src.misc.color import colors
