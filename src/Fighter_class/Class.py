@@ -93,7 +93,7 @@ class Priest(FighterInterface):
                     self.focus_heal_specific_class(self.heal_tactic)
 
     def focus_heal_random(self):
-        if len(self.enemy_team):
+        if len(self.enemy_team) and len(self.ally_team):
             ally = choice(self.ally_team)
             while ally.health_point == ally.max_hp and len(self.enemy_team) != 0:
                 ally = choice(self.ally_team)

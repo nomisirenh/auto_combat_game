@@ -139,6 +139,8 @@ class FighterInterface (ABC, threading.Thread):
 
             if self.tactic == None:
                 self.focus_random()
+            elif self.tactic == "attack":
+                self.focus_most_attack()
             else:
                 self.focus_specific_class(self.tactic)
 
@@ -162,6 +164,17 @@ class FighterInterface (ABC, threading.Thread):
         else:
             self.focus_random()
 
+    def focus_most_attack(self):
+        attack_value = 0
+        choosen_enemy = None
+        
+        while choosen_enemy == None and len(self.enemy_team):
+            choosen_enemy = max(self.enemy_team, key=lambda item: item.attack_value)
+        
+        if choosen_enemy != None and choosen_enemy.is_alive() and not self.is_dead:
+            with choosen_enemy.lock:
+                self.attack(choosen_enemy)
+
     def is_class_in(self, f_class, ally_or_enemy):
         if ally_or_enemy == "enemy":
             for enemy in self.enemy_team:
@@ -177,6 +190,6 @@ class FighterInterface (ABC, threading.Thread):
     def __str__(self) -> str:
         #return f'{self.id},{self._class}, {self.name}, {self.lastname}, attaque = {self.attack_value}, defense = {self.defense_value}, health = {self.health_point}, critical = {self.critical}, initiative = {self.initiative}, parry = {self.parry}, dodge = {self.dodge}'
         if self.team_color:
-            return f'{self._class}, {self.team_color}{self.name} {self.lastname}{colors.reset}, {self.health_point} hp'
+            return f'{self._class}, {self.team_color}{self.name} {self.lastname}{colors.reset}, {self.health_point} hp, {self.attack_value} attack'
         else:
-            return f'{self._class}, {self.name} {self.lastname}, {self.health_point} hp'
+            return f'{self._class}, {self.name} {self.lastname}, {self.health_point} hp, {self.attack_value} attack'
