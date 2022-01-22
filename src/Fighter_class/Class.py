@@ -86,6 +86,8 @@ class Priest(FighterInterface):
                     self.focus_random()
                 elif self.tactic == "less HP":
                     self.focus_less_hp()
+                elif self.tactic == "most def":
+                    self.focus_most_def()
                 else:
                     self.focus_specific_class(self.tactic)
             else:

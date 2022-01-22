@@ -41,7 +41,8 @@ class Main():
             print("    [3] Focus Priests")
             print("    [4] Focus Wizards")
             print("    [5] Focus enemy less HP")
-            print("    [6] Random")
+            print("    [6] Focus enemy with most defense")
+            print("    [7] Random")
 
             c = input(f"{colors.fgBrightYellow}ENTER CHOICE: {colors.reset}")
             while c not in ["1","2","3","4", "5", "6"]:
@@ -58,7 +59,7 @@ class Main():
             print("    [6] Random")
 
             d = input(f"{colors.fgBrightYellow}ENTER CHOICE: {colors.reset}")
-            while d not in ["1","2","3","4", "5", "6"]:
+            while d not in ["1","2","3","4", "5", "6", "7"]:
                 print(f"{colors.fgRed}WRONG CHOICE{colors.reset}")
                 d = input(f"{colors.fgBrightYellow}ENTER CHOICE: {colors.reset}")
             print("")
@@ -74,6 +75,8 @@ class Main():
             elif int(c) == 5:
                 tactic = "less HP"
             elif int(c) == 6:
+                tactic = "most def"
+            elif int(c) == 7:
                 tactic = None
 
             if int(d) == 1:

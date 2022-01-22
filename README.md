@@ -14,8 +14,7 @@ You can choose your fighting tactic, you can
 - Focus Priests
 - Focus Rogues
 - Focus the enemy with lesser health point left
-
-  
+- Focus the enemy with the most defense
 
 You can also choos your Healing tactic, you can:
 
