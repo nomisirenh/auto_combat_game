@@ -57,16 +57,16 @@ class Priest(FighterInterface):
 
     def heal(self, fighter:FighterInterface):
 
-        hp = self.health_point + (self.defense_value//4)
-        if hp > self.max_hp and not self.is_dead and len(self.enemy_team) != 0 and fighter.health_point != fighter.max_hp:
+        hp = fighter.health_point + (self.defense_value//4)
+        if not fighter.is_dead and hp > self.max_hp and not self.is_dead and len(self.enemy_team) != 0 and fighter.health_point != fighter.max_hp:
             fighter.set_hp_max()
 
-        elif not self.is_dead and len(self.enemy_team) != 0 and fighter.health_point != fighter.max_hp:
+        elif not fighter.is_dead and not self.is_dead and len(self.enemy_team) != 0 and fighter.health_point != fighter.max_hp:
             fighter.health_point = hp
         
         if fighter == self and not self.is_dead:
             print(f'{self} {colors.fgMagenta}HEAL HIMSELF{colors.reset}')
-        elif not self.is_dead:
+        elif not self.is_dead and not fighter.is_dead:
             print(f'{self} {colors.fgMagenta}HEAL{colors.reset} {fighter}')
     
     def set_heal_tactic(self, heal_tactic):
@@ -84,21 +84,25 @@ class Priest(FighterInterface):
             if i == 0:
                 if self.tactic == None:
                     self.focus_random()
+                elif self.tactic == "less HP":
+                    self.focus_less_hp()
                 else:
                     self.focus_specific_class(self.tactic)
             else:
                 if self.heal_tactic == None:
                     self.focus_heal_random()
+                elif self.heal_tactic == "less HP":
+                    self.focus_heal_less_hp()
                 else:
                     self.focus_heal_specific_class(self.heal_tactic)
 
     def focus_heal_random(self):
         if len(self.enemy_team) and len(self.ally_team):
             ally = choice(self.ally_team)
-            while ally.health_point == ally.max_hp and len(self.enemy_team) != 0:
+            while ally.health_point == ally.max_hp and len(self.enemy_team) != 0 and len(self.ally_team):
                 ally = choice(self.ally_team)
 
-            if ally.is_alive() and not self.is_dead and len(self.enemy_team) != 0:
+            if not ally.is_dead and ally.is_alive() and not self.is_dead and len(self.enemy_team) != 0:
                 with ally.lock:
                     self.heal(ally)
 
@@ -108,9 +112,18 @@ class Priest(FighterInterface):
             while ally._class != focus_class and len(self.enemy_team) and self.is_class_in(focus_class, "ally"):
                 ally = choice(self.ally_team)
 
-            if ally.is_alive() and not self.is_dead:
+            if not ally.is_dead and ally.is_alive() and not self.is_dead and len(self.enemy_team) != 0:
                 with ally.lock:
                     self.heal(ally)
         else:
             self.focus_random()
 
+    def focus_heal_less_hp(self):
+        ally = min(self.ally_team, key=lambda item: item.health_point)
+
+        while ally.max_hp == ally.health_point and len(self.enemy_team) and len(self.ally_team):
+            ally = min(self.ally_team, key=lambda item: item.health_point)
+        
+        if not ally.is_dead and ally.is_alive() and not self.is_dead and len(self.enemy_team) != 0:
+            with ally.lock:
+                    self.heal(ally)

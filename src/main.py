@@ -40,7 +40,7 @@ class Main():
             print("    [2] Focus Rogues")
             print("    [3] Focus Priests")
             print("    [4] Focus Wizards")
-            print("    [5] Focus enemy with most attack")
+            print("    [5] Focus enemy less HP")
             print("    [6] Random")
 
             c = input(f"{colors.fgBrightYellow}ENTER CHOICE: {colors.reset}")
@@ -54,10 +54,11 @@ class Main():
             print("    [2] Heal Rogues")
             print("    [3] Heal Priests")
             print("    [4] Heal Wizards")
-            print("    [5] Random")
+            print("    [5] Heal ally with less HP")
+            print("    [6] Random")
 
             d = input(f"{colors.fgBrightYellow}ENTER CHOICE: {colors.reset}")
-            while d not in ["1","2","3","4", "5"]:
+            while d not in ["1","2","3","4", "5", "6"]:
                 print(f"{colors.fgRed}WRONG CHOICE{colors.reset}")
                 d = input(f"{colors.fgBrightYellow}ENTER CHOICE: {colors.reset}")
             print("")
@@ -71,7 +72,7 @@ class Main():
             elif int(c) == 4:
                 tactic = "Wizard"
             elif int(c) == 5:
-                tactic = "attack"
+                tactic = "less HP"
             elif int(c) == 6:
                 tactic = None
 
@@ -84,6 +85,8 @@ class Main():
             elif int(d) == 4:
                 heal_tactic = "Wizard"
             elif int(d) == 5:
+                heal_tactic = "less HP"
+            elif int(d) == 6:
                 heal_tactic = None
             
             team.set_team_tactic(tactic, heal_tactic)
