@@ -45,7 +45,7 @@ class Main():
             print("    [7] Random")
 
             c = input(f"{colors.fgBrightYellow}ENTER CHOICE: {colors.reset}")
-            while c not in ["1","2","3","4", "5", "6"]:
+            while c not in ["1","2","3","4", "5", "6", "7"]:
                 print(f"{colors.fgRed}WRONG CHOICE{colors.reset}")
                 c = input(f"{colors.fgBrightYellow}ENTER CHOICE: {colors.reset}")
             print("")
@@ -59,7 +59,7 @@ class Main():
             print("    [6] Random")
 
             d = input(f"{colors.fgBrightYellow}ENTER CHOICE: {colors.reset}")
-            while d not in ["1","2","3","4", "5", "6", "7"]:
+            while d not in ["1","2","3","4", "5", "6"]:
                 print(f"{colors.fgRed}WRONG CHOICE{colors.reset}")
                 d = input(f"{colors.fgBrightYellow}ENTER CHOICE: {colors.reset}")
             print("")
