@@ -3,7 +3,9 @@
 
 To play the game execute de main file with this command:
 
-> python -m src.main
+```python
+python -m src.main
+```
 
 ## Game mecanics
 
