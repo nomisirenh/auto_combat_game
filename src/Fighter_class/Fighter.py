@@ -168,10 +168,14 @@ class FighterInterface (ABC, threading.Thread):
 
     def focus_less_hp(self):
         if len(self.enemy_team):
-            enemy = min(self.enemy_team, key=lambda item: item.health_point)
-
-            while enemy.is_dead and len(self.enemy_team) and len(self.ally_team):
+            try:
                 enemy = min(self.enemy_team, key=lambda item: item.health_point)
+
+                while enemy.is_dead and len(self.enemy_team) and len(self.ally_team):
+                    enemy = min(self.enemy_team, key=lambda item: item.health_point)
+                    
+            except ValueError:
+                pass
             
             if not enemy.is_dead and enemy.is_alive() and not self.is_dead and len(self.enemy_team):
                 with enemy.lock:
@@ -179,10 +183,14 @@ class FighterInterface (ABC, threading.Thread):
 
     def focus_most_def(self):
         if len(self.enemy_team):
-            enemy = max(self.enemy_team, key=lambda item: item.defense_value)
-
-            while enemy.is_dead and len(self.enemy_team) and len(self.ally_team):
+            try:
                 enemy = max(self.enemy_team, key=lambda item: item.defense_value)
+
+                while enemy.is_dead and len(self.enemy_team) and len(self.ally_team):
+                    enemy = max(self.enemy_team, key=lambda item: item.defense_value)
+
+            except ValueError:
+                pass
             
             if not enemy.is_dead and enemy.is_alive() and not self.is_dead and len(self.enemy_team):
                 with enemy.lock:

@@ -121,10 +121,14 @@ class Priest(FighterInterface):
             self.focus_random()
 
     def focus_heal_less_hp(self):
-        ally = min(self.ally_team, key=lambda item: item.health_point)
-
-        while ally.max_hp == ally.health_point and len(self.enemy_team) and len(self.ally_team):
+        try:
             ally = min(self.ally_team, key=lambda item: item.health_point)
+
+            while ally.max_hp == ally.health_point and len(self.enemy_team) and len(self.ally_team):
+                ally = min(self.ally_team, key=lambda item: item.health_point)
+                
+        except ValueError:
+            pass
         
         if not ally.is_dead and ally.is_alive() and not self.is_dead and len(self.enemy_team) != 0:
             with ally.lock:

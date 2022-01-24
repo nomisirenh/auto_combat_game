@@ -148,6 +148,8 @@ class Game():
 
     def do_fight(self):
         battle_id = get_max_battle_id()
+        if battle_id == None:
+            battle_id = 0
         battle_id +=1
         print(f"{colors.fgBrightMagenta}════════════════════════BATTLE {battle_id} START════════════════════════")      
 
