@@ -1,17 +1,18 @@
-from os import SEEK_CUR
 from src.Fighter_class.Fighter import FighterInterface
 from src.Fighter_class.Class import Warrior, Rogue, Wizard, Priest
 from src.Fighter_class.Team import Team
-from src.db.insert_db import insert_fighter
-from src.db.get_db import get_random_fighter, get_random_team
-from src.Fighter_class.NameGenerator import name_generator
+from src.db.insert_db import insert_fighter, insert_battle, insert_fighter_team
+from src.db.get_db import get_random_fighter, get_random_team, get_max_battle_id
+from src.db.update_db import set_hp_fighter
+from src.misc.NameGenerator import name_generator
+from src.misc.color import colors
 from random import randrange
 
 class Game():
     teams : list[Team]
     fighters : list[FighterInterface]
     def __init__(self) -> None:
-        #self.generate_new_fighter()
+        self.generate_new_fighter()
         self.fighters = self.get_figthers_from_db()
         self.teams = self.assign_team()
 
@@ -19,19 +20,42 @@ class Game():
         """
         Generate 20 random fighters and insert them into the database
         """
-        print("Génération de 20 nouveau combattants...")
+        print("Generation of 20 new fighters...")
         for i in range(20):
             name = name_generator()
             lastname = name_generator()
             choice = randrange(1,5)
             if choice == 1:
-                player = Warrior(name, lastname)
+                attack = randrange(70,91)
+                defense_value = randrange(70, 91)
+                health_point = randrange(120, 151)
+                critical = randrange(5,8)
+                initiative = randrange(40,61)
+                parry = randrange(40,61)
+                player = Warrior(name, lastname, attack, defense_value, health_point, critical, initiative, parry)
             if choice == 2:
-                player = Rogue(name, lastname)
+                attack = randrange(40,61)
+                defense_value = randrange(30, 51)
+                health_point = randrange(70, 81)
+                critical = randrange(15,21)
+                initiative = randrange(75,91)
+                dodge = randrange(40,71)
+                player = Rogue(name, lastname, attack, defense_value, health_point, critical, initiative, None, dodge)
             if choice == 3:
-                player = Wizard(name, lastname)
+                attack = randrange(100,151)
+                defense_value = randrange(20, 41)
+                health_point = randrange(60, 71)
+                critical = randrange(5,7)
+                initiative = randrange(75,91)
+                player = Wizard(name, lastname, attack, defense_value, health_point, critical, initiative)
             if choice == 4:
-                player = Priest(name, lastname)
+                attack = randrange(30,61)
+                defense_value  = randrange(60, 81)
+                health_point = randrange(70, 90)
+                critical = randrange(5,7)
+                initiative = randrange(50,60)
+                parry = randrange(30,51)
+                player = Priest(name, lastname, attack, defense_value, health_point, critical, initiative, parry)
         
             id = insert_fighter((player.name, player.lastname, player._class, player.attack_value, player.defense_value, player.health_point, player.critical, player.initiative, player.parry, player.dodge))
 
@@ -61,29 +85,73 @@ class Game():
         """
         datas = get_random_team()
         teams = list()
+        teams: list[Team]
         mid = self.fighters[10:]
 
         for data in datas:
             team = Team(id = data[0], name = data[1],fighters = mid)
+            if team.name == "Blue":
+                team.color = "\033[34m"
+                self.team_blue_bk = team.fighters.copy()
+            else:
+                team.color = "\033[32m"
+                self.team_red_bk = team.fighters.copy()
+
             mid = self.fighters[:10]
             teams.append(team)
         
+        for fighter in self.fighters:
+            if fighter in teams[0].fighters:
+                fighter.set_enemy_team(teams[1].fighters)
+                fighter.set_ally_team(teams[0].fighters)
+                fighter.set_color(teams[0].color)
+
+            else:
+                fighter.set_enemy_team(teams[0].fighters)
+                fighter.set_ally_team(teams[1].fighters)
+                fighter.set_color(teams[1].color)
+        
         return teams
 
-    def do_fight(self):
-        print("=================DEBUT DE LA BATTAILLE=================")
+    def update_fighter_in_db(self, battle_id):
+        f: FighterInterface
+        for team in self.teams:
+            if team.name == "Blue":
+
+                for f in self.team_blue_bk:
+                    if f in team.fighters:
+                        set_hp_fighter((f.health_point, f.id))
+                    else:
+                        set_hp_fighter((0, f.id))
+                    
+                    insert_fighter_team((f.id, team.id, battle_id, f.health_point ,team.fighting_tactic, team.heal_tactic))
+            else:
+                for f in self.team_red_bk:
+                    if f in team.fighters:
+                        set_hp_fighter((f.health_point, f.id))
+                    else:
+                        set_hp_fighter((0, f.id))
+
+                    insert_fighter_team((f.id, team.id, battle_id, f.health_point,team.fighting_tactic, team.heal_tactic))
+
+    def save_battle_in_db(self):
+        if self.teams[0].win:
+            id = insert_battle((self.teams[0].name, self.teams[1].name, self.teams[0].fighters_alive()))
+        else:
+            id = insert_battle((self.teams[1].name, self.teams[0].name, self.teams[1].fighters_alive()))
+        return id
+
+    def teams_description(self):
         for team in self.teams:
             team.team_str()
-            
+        print("")  
 
-        print("")
-        for fighter in self.fighters:
-            if fighter in self.teams[0].fighters:
-                fighter.enemy_team = self.teams[1].fighters
-                fighter.ally_team = self.teams[0].fighters
-            else:
-                fighter.enemy_team = self.teams[0].fighters
-                fighter.ally_team = self.teams[1].fighters
+    def do_fight(self):
+        battle_id = get_max_battle_id()
+        if battle_id == None:
+            battle_id = 0
+        battle_id +=1
+        print(f"{colors.fgBrightMagenta}════════════════════════BATTLE {battle_id} START════════════════════════")      
 
         for fighter in self.fighters:
             fighter.start()
@@ -92,11 +160,16 @@ class Game():
             fighter.join()
 
         print("")
-        print("=================FIN DE BATTAILLE=================")
+        print(f"{colors.fgBrightMagenta}════════════════════════BATTLE {battle_id} END════════════════════════{colors.reset}")
         for team in self.teams:
             team.team_str()
-            print(f"Combattant(s) en vie: {team.fighters_alive()}/10")
+            print(f"=> Combattant(s) en vie: {team.fighters_alive()}/10")
+            if team.fighters_alive():
+                team.win = True
+            else:
+                team.win = False
 
-if __name__ == '__main__':
-    game = Game()
-    game.do_fight()
+        battle_id = self.save_battle_in_db()
+        self.update_fighter_in_db(battle_id)
+
+    

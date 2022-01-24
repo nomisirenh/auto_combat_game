@@ -38,8 +38,8 @@ def insert_team(values):
 
 def insert_fighter_team(values):
 
-    querry = """INSERT INTO Fighter_team(fighter_id, team_id ,battle_id) 
-                VALUES (?,?,?)"""
+    querry = """INSERT INTO Fighter_team(fighter_id, team_id ,battle_id, remaining_hp,fighting_tactic, healing_tactic) 
+                VALUES (?,?,?,?,?,?)"""
     
     conn = create_connection()
     with conn:

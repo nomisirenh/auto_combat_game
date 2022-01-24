@@ -1,5 +1,5 @@
 import unittest
-from src.Fighter_class.NameGenerator import name_generator
+from src.misc.NameGenerator import name_generator
 
 class NameGenTesting(unittest.TestCase):
     def test_name_gen(self):

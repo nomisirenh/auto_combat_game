@@ -10,8 +10,4 @@ def create_connection():
     except Error as e:
         print(e)
 
-
-
-if __name__ == '__main__':
-    pass
         
